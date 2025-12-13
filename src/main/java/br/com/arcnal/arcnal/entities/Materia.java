@@ -1,9 +1,7 @@
 package br.com.arcnal.arcnal.entities;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,6 +10,8 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Materia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

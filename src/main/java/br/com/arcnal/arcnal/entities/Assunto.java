@@ -1,6 +1,7 @@
 package br.com.arcnal.arcnal.entities;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import lombok.Setter;
 @Table(name = "assuntos")
 @Getter
 @Setter
+@Builder
 public class Assunto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
