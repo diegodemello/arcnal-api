@@ -1,5 +1,6 @@
 package br.com.arcnal.arcnal.dtos;
 
+import br.com.arcnal.arcnal.entities.enums.Nivel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -14,6 +15,8 @@ public record QuestaoReqDTO(
         Integer ano,
         @NotBlank(message = "O enunciado não pode ser vazio.")
         String enunciado,
+        @NotNull
+        Nivel nivel,
         @NotBlank(message = "A alternativa A é obrigatória.")
         String alternativaA,
         @NotBlank(message = "A alternativa B é obrigatória.")

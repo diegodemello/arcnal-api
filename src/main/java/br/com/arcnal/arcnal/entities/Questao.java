@@ -1,5 +1,6 @@
 package br.com.arcnal.arcnal.entities;
 
+import br.com.arcnal.arcnal.entities.enums.Nivel;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -29,6 +30,9 @@ public class Questao {
     private Assunto assunto;
     private Integer ano;
     private String enunciado;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Nivel nivel;
     @Column(name = "alt_a")
     private String alternativaA;
     @Column(name = "alt_b")
