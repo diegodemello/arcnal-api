@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.List;
 
 @Service
 public class QuestaoServiceImpl implements IQuestaoService{
@@ -78,5 +79,22 @@ public class QuestaoServiceImpl implements IQuestaoService{
                 .alternativaE(questao.getAlternativaE())
                 .build();
         return respDto;
+    }
+
+    @Override
+    public List<QuestaoRespDTO> listarQuestoes() {
+        List<QuestaoRespDTO> questoes = questaoDAO.findAll()
+                .stream()
+                .map(questao -> QuestaoRespDTO.builder()
+                        .id(questao.getId())
+                        .enunciado(questao.getEnunciado())
+                        .alternativaA(questao.getAlternativaA())
+                        .alternativaB(questao.getAlternativaB())
+                        .alternativaC(questao.getAlternativaC())
+                        .alternativaD(questao.getAlternativaD())
+                        .alternativaE(questao.getAlternativaE())
+                        .build())
+                .toList();
+        return questoes;
     }
 }
