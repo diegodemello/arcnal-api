@@ -2,8 +2,9 @@ package br.com.arcnal.arcnal.entities;
 
 import br.com.arcnal.arcnal.entities.enums.Cargo;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,6 +13,9 @@ import java.util.UUID;
 @Table(name = "usuarios")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -21,11 +25,13 @@ public class Usuario {
     private String senha;
     @Column(name = "endereco_ip")
     private String enderecoIp;
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Cargo cargo;
     private boolean banido;
     @Column(name = "criado_em")
+    @CreatedDate
     private LocalDateTime criadoEm;
     @Column(name = "atualizado_em")
+    @LastModifiedDate
     private LocalDateTime atualizadoEm;
 }
