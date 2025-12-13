@@ -58,6 +58,7 @@ public class QuestaoServiceImpl implements IQuestaoService{
                 .assunto(assunto)
                 .ano(dto.ano())
                 .enunciado(dto.enunciado())
+                .nivel(dto.nivel())
                 .alternativaA(dto.alternativaA())
                 .alternativaB(dto.alternativaB())
                 .alternativaC(dto.alternativaC())
@@ -71,6 +72,7 @@ public class QuestaoServiceImpl implements IQuestaoService{
 
         QuestaoRespDTO respDto = QuestaoRespDTO.builder()
                 .id(questao.getId())
+                .nivel(questao.getNivel())
                 .enunciado(questao.getEnunciado())
                 .alternativaA(questao.getAlternativaA())
                 .alternativaB(questao.getAlternativaB())
@@ -87,6 +89,7 @@ public class QuestaoServiceImpl implements IQuestaoService{
                 .stream()
                 .map(questao -> QuestaoRespDTO.builder()
                         .id(questao.getId())
+                        .nivel(questao.getNivel())
                         .enunciado(questao.getEnunciado())
                         .alternativaA(questao.getAlternativaA())
                         .alternativaB(questao.getAlternativaB())
