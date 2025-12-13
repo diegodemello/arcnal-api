@@ -1,8 +1,8 @@
 package br.com.arcnal.arcnal.services;
 
 import br.com.arcnal.arcnal.dtos.AssuntoReqDTO;
-import br.com.arcnal.arcnal.entities.Assunto;
+import br.com.arcnal.arcnal.dtos.AssuntoRespDTO;
 
 public interface IAssuntoService {
-    Assunto criarNovoAssunto(AssuntoReqDTO dto);
+    AssuntoRespDTO criarNovoAssunto(AssuntoReqDTO dto);
 }
