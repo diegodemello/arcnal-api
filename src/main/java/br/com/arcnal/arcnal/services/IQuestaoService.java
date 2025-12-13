@@ -1,0 +1,8 @@
+package br.com.arcnal.arcnal.services;
+
+import br.com.arcnal.arcnal.dtos.QuestaoReqDTO;
+import br.com.arcnal.arcnal.dtos.QuestaoRespDTO;
+
+public interface IQuestaoService {
+    QuestaoRespDTO adicionarQuestao(QuestaoReqDTO dto);
+}

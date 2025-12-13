@@ -1,8 +1,9 @@
 package br.com.arcnal.arcnal.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +11,9 @@ import java.time.LocalDateTime;
 @Table(name = "questoes")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Questao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +46,9 @@ public class Questao {
     @Column(name = "video_correcao")
     private String videoCorrecao;
     @Column(name = "criado_em")
+    @CreatedDate
     private LocalDateTime criadoEm;
     @Column(name = "atualizado_em")
+    @LastModifiedDate
     private LocalDateTime atualizadoEm;
 }
