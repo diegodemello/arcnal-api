@@ -1,13 +1,14 @@
 package br.com.arcnal.arcnal.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
 @Entity
 @Table(name = "bancas")
 @Getter
 @Setter
+@Builder
 public class Banca {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
