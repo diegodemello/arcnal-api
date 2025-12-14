@@ -1,8 +1,10 @@
 package br.com.arcnal.arcnal.entities;
 
+import br.com.arcnal.arcnal.entities.enums.Nivel;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +12,9 @@ import java.time.LocalDateTime;
 @Table(name = "questoes")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Questao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +30,9 @@ public class Questao {
     private Assunto assunto;
     private Integer ano;
     private String enunciado;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Nivel nivel;
     @Column(name = "alt_a")
     private String alternativaA;
     @Column(name = "alt_b")
@@ -42,7 +50,9 @@ public class Questao {
     @Column(name = "video_correcao")
     private String videoCorrecao;
     @Column(name = "criado_em")
+    @CreatedDate
     private LocalDateTime criadoEm;
     @Column(name = "atualizado_em")
+    @LastModifiedDate
     private LocalDateTime atualizadoEm;
 }

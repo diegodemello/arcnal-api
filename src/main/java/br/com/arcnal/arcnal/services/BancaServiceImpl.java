@@ -3,15 +3,16 @@ package br.com.arcnal.arcnal.services;
 import br.com.arcnal.arcnal.dao.BancaDAO;
 import br.com.arcnal.arcnal.dtos.BancaRequestDTO;
 import br.com.arcnal.arcnal.entities.Banca;
+import br.com.arcnal.arcnal.mapper.BancaMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class BancaServiceImpl implements IBancaService {
 
-    BancaDAO bancaDAO;
-    public BancaServiceImpl(BancaDAO bancaDAO) {
-        this.bancaDAO = bancaDAO;
-    }
+    private final BancaDAO bancaDAO;
+    private final BancaMapper bancaMapper;
 
     @Override
     public Banca adicionarBanca(BancaRequestDTO dto) {
@@ -20,9 +21,7 @@ public class BancaServiceImpl implements IBancaService {
             throw new RuntimeException("Banca já cadastrada no sistema.");
         }
 
-        Banca banca = Banca.builder()
-                .nome(dto.nome())
-                .build();
+        Banca banca = bancaMapper.requestToEntity(dto);
         return bancaDAO.save(banca);
     }
 }
