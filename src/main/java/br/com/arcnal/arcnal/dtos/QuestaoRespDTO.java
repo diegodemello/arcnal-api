@@ -6,7 +6,11 @@ import lombok.Builder;
 @Builder
 public record QuestaoRespDTO(
         Integer id,
+        String banca,
+        String materia,
+        String assunto,
         Nivel nivel,
+        Integer ano,
         String enunciado,
         String alternativaA,
         String alternativaB,

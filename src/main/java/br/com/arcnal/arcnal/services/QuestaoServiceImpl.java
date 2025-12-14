@@ -10,26 +10,24 @@ import br.com.arcnal.arcnal.entities.Assunto;
 import br.com.arcnal.arcnal.entities.Banca;
 import br.com.arcnal.arcnal.entities.Materia;
 import br.com.arcnal.arcnal.entities.Questao;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.com.arcnal.arcnal.mapper.QuestaoMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class QuestaoServiceImpl implements IQuestaoService{
 
-    @Autowired
-    QuestaoDAO questaoDAO;
-    @Autowired
-    BancaDAO bancaDAO;
-    @Autowired
-    MateriaDAO materiaDAO;
-    @Autowired
-    AssuntoDAO assuntoDAO;
+    private final QuestaoDAO questaoDAO;
+    private final BancaDAO bancaDAO;
+    private final MateriaDAO materiaDAO;
+    private final AssuntoDAO assuntoDAO;
+    private final QuestaoMapper questaoMapper;
 
     Integer anoAtual = Calendar.getInstance().get(Calendar.YEAR);
-
 
     @Override
     public QuestaoRespDTO adicionarQuestao(QuestaoReqDTO dto) {
@@ -52,52 +50,18 @@ public class QuestaoServiceImpl implements IQuestaoService{
             throw new RuntimeException("A alternativa correta deve ser uma alternativa válida.");
         }
 
-        Questao questao = Questao.builder()
-                .banca(banca)
-                .materia(materia)
-                .assunto(assunto)
-                .ano(dto.ano())
-                .enunciado(dto.enunciado())
-                .nivel(dto.nivel())
-                .alternativaA(dto.alternativaA())
-                .alternativaB(dto.alternativaB())
-                .alternativaC(dto.alternativaC())
-                .alternativaD(dto.alternativaD())
-                .alternativaE(dto.alternativaE())
-                .alternativaCorreta(dto.alternativaCorreta())
-                .textoCorrecao(dto.textoCorrecao())
-                .videoCorrecao(dto.videoCorrecao())
-                .build();
+        Questao questao = questaoMapper.requestToEntity(dto);
+        questao.setBanca(banca);
+        questao.setMateria(materia);
+        questao.setAssunto(assunto);
         questaoDAO.save(questao);
 
-        QuestaoRespDTO respDto = QuestaoRespDTO.builder()
-                .id(questao.getId())
-                .nivel(questao.getNivel())
-                .enunciado(questao.getEnunciado())
-                .alternativaA(questao.getAlternativaA())
-                .alternativaB(questao.getAlternativaB())
-                .alternativaC(questao.getAlternativaC())
-                .alternativaD(questao.getAlternativaD())
-                .alternativaE(questao.getAlternativaE())
-                .build();
-        return respDto;
+        QuestaoRespDTO questaoRespDTO = questaoMapper.entityToDto(questao);
+        return questaoRespDTO;
     }
 
     @Override
     public List<QuestaoRespDTO> listarQuestoes() {
-        List<QuestaoRespDTO> questoes = questaoDAO.findAll()
-                .stream()
-                .map(questao -> QuestaoRespDTO.builder()
-                        .id(questao.getId())
-                        .nivel(questao.getNivel())
-                        .enunciado(questao.getEnunciado())
-                        .alternativaA(questao.getAlternativaA())
-                        .alternativaB(questao.getAlternativaB())
-                        .alternativaC(questao.getAlternativaC())
-                        .alternativaD(questao.getAlternativaD())
-                        .alternativaE(questao.getAlternativaE())
-                        .build())
-                .toList();
-        return questoes;
+        return questaoMapper.entitiesToDtos(questaoDAO.findAll());
     }
 }
