@@ -1,8 +1,12 @@
 package br.com.arcnal.arcnal.services;
 
 import br.com.arcnal.arcnal.dtos.AssuntoReqDTO;
-import br.com.arcnal.arcnal.entities.Assunto;
+import br.com.arcnal.arcnal.dtos.AssuntoRespDTO;
+import br.com.arcnal.arcnal.dtos.AssuntosMateriaRespDTO;
+
+import java.util.List;
 
 public interface IAssuntoService {
-    Assunto criarNovoAssunto(AssuntoReqDTO dto);
+    AssuntoRespDTO criarNovoAssunto(AssuntoReqDTO dto);
+    AssuntosMateriaRespDTO listarAssuntosPorMateria(Integer idMateria);
 }
