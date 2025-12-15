@@ -1,0 +1,26 @@
+package br.com.arcnal.arcnal.mapper;
+
+import br.com.arcnal.arcnal.dtos.RevisaoReqDTO;
+import br.com.arcnal.arcnal.dtos.RevisaoRespDTO;
+import br.com.arcnal.arcnal.entities.Revisao;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
+
+import java.util.List;
+
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.ERROR,
+        uses = {QuestaoMapper.class})
+public interface RevisaoMapper {
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "usuario", ignore = true)
+    @Mapping(target = "questoes", ignore = true)
+    @Mapping(target = "criadoEm", ignore = true)
+    @Mapping(target = "atualizadoEm", ignore = true)
+    Revisao requestToEntity(RevisaoReqDTO dto);
+
+    @Mapping(target = "idUsuario", source = "usuario.id")
+    List<RevisaoRespDTO> entityToResponse(List<Revisao> revisoes);
+}
