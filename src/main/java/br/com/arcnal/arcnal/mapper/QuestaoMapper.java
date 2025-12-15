@@ -1,7 +1,7 @@
 package br.com.arcnal.arcnal.mapper;
 
-import br.com.arcnal.arcnal.dtos.QuestaoReqDTO;
-import br.com.arcnal.arcnal.dtos.QuestaoRespDTO;
+import br.com.arcnal.arcnal.dtos.QuestaoRequestDTO;
+import br.com.arcnal.arcnal.dtos.QuestaoResponseDTO;
 import br.com.arcnal.arcnal.entities.Questao;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,11 +20,11 @@ public interface QuestaoMapper {
     @Mapping(target = "materia", ignore = true)
     @Mapping(target = "banca", ignore = true)
     @Mapping(target = "assunto", ignore = true)
-    Questao requestToEntity(QuestaoReqDTO dto);
+    Questao toEntity(QuestaoRequestDTO dto);
 
     @Mapping(target = "banca", source = "banca.nome")
     @Mapping(target = "materia", source = "materia.nome")
     @Mapping(target = "assunto", source = "assunto.nome")
-    QuestaoRespDTO entityToDto(Questao entity);
-    List<QuestaoRespDTO> entitiesToDtos(List<Questao> questoes);
+    QuestaoResponseDTO toResponse(Questao entity);
+    List<QuestaoResponseDTO> toResponses(List<Questao> questoes);
 }

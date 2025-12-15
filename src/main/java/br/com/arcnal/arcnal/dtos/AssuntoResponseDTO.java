@@ -3,7 +3,7 @@ package br.com.arcnal.arcnal.dtos;
 import lombok.Builder;
 
 @Builder
-public record AssuntoRespDTO(
+public record AssuntoResponseDTO(
         Integer id,
         String nome
 ) {

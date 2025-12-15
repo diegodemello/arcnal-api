@@ -2,9 +2,9 @@ package br.com.arcnal.arcnal.dtos;
 
 import java.util.List;
 
-public record AssuntosMateriaRespDTO(
+public record AssuntosMateriaResponseDTO(
         Integer id,
         String nome,
-        List<AssuntoRespDTO> assuntos
+        List<AssuntoResponseDTO> assuntos
 ) {
 }

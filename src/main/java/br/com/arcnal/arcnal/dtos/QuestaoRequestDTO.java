@@ -4,7 +4,7 @@ import br.com.arcnal.arcnal.entities.enums.Nivel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record QuestaoReqDTO(
+public record QuestaoRequestDTO(
         @NotNull
         Integer idBanca,
         @NotNull

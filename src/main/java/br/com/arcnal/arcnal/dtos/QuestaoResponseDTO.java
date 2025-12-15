@@ -4,7 +4,7 @@ import br.com.arcnal.arcnal.entities.enums.Nivel;
 import lombok.Builder;
 
 @Builder
-public record QuestaoRespDTO(
+public record QuestaoResponseDTO(
         Integer id,
         String banca,
         String materia,

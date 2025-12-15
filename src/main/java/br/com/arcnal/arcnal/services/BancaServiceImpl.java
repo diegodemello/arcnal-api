@@ -16,12 +16,9 @@ public class BancaServiceImpl implements IBancaService {
 
     @Override
     public Banca adicionarBanca(BancaRequestDTO dto) {
-        System.out.println(dto.nome());
         if(bancaDAO.existsByNome(dto.nome())){
             throw new RuntimeException("Banca já cadastrada no sistema.");
         }
-
-        Banca banca = bancaMapper.requestToEntity(dto);
-        return bancaDAO.save(banca);
+        return bancaDAO.save(bancaMapper.toEntity(dto));
     }
 }

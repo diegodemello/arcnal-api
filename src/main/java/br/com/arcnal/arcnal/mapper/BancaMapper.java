@@ -11,5 +11,5 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface BancaMapper {
     @Mapping(target = "id", ignore = true)
-    Banca requestToEntity(BancaRequestDTO dto);
+    Banca toEntity(BancaRequestDTO dto);
 }

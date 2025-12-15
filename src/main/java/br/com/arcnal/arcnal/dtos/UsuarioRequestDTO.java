@@ -2,7 +2,7 @@ package br.com.arcnal.arcnal.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record UsuarioReqDTO(
+public record UsuarioRequestDTO(
         @NotBlank(message = "O nome de usuário não pode ser vazio.")
         String nome,
         @NotBlank(message = "O email não pode ser vazio.")

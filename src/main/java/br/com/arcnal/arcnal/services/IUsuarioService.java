@@ -1,11 +1,11 @@
 package br.com.arcnal.arcnal.services;
 
-import br.com.arcnal.arcnal.dtos.UsuarioReqDTO;
-import br.com.arcnal.arcnal.dtos.UsuarioRespDTO;
+import br.com.arcnal.arcnal.dtos.UsuarioRequestDTO;
+import br.com.arcnal.arcnal.dtos.UsuarioResponseDTO;
 
 import java.util.List;
 
 public interface IUsuarioService {
-    void cadastrarUsuario(UsuarioReqDTO dto, String enderecoIp);
-    List<UsuarioRespDTO> listarUsuarios();
+    void cadastrarUsuario(UsuarioRequestDTO dto, String enderecoIp);
+    List<UsuarioResponseDTO> listarUsuarios();
 }

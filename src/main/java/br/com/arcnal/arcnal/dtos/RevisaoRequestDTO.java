@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
-public record RevisaoReqDTO(
+public record RevisaoRequestDTO(
         @NotBlank(message = "O nome da revisão é obrigatório.")
         String nome,
         UUID idUsuario,

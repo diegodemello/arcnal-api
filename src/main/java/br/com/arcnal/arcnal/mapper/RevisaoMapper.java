@@ -1,7 +1,7 @@
 package br.com.arcnal.arcnal.mapper;
 
-import br.com.arcnal.arcnal.dtos.RevisaoReqDTO;
-import br.com.arcnal.arcnal.dtos.RevisaoRespDTO;
+import br.com.arcnal.arcnal.dtos.RevisaoRequestDTO;
+import br.com.arcnal.arcnal.dtos.RevisaoResponseDTO;
 import br.com.arcnal.arcnal.entities.Revisao;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,8 +19,8 @@ public interface RevisaoMapper {
     @Mapping(target = "questoes", ignore = true)
     @Mapping(target = "criadoEm", ignore = true)
     @Mapping(target = "atualizadoEm", ignore = true)
-    Revisao requestToEntity(RevisaoReqDTO dto);
+    Revisao toEntity(RevisaoRequestDTO dto);
 
     @Mapping(target = "idUsuario", source = "usuario.id")
-    List<RevisaoRespDTO> entityToResponse(List<Revisao> revisoes);
+    List<RevisaoResponseDTO> toResponse(List<Revisao> revisoes);
 }
