@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class MateriaServiceImpl implements IMateriaService{
 
     private final MateriaDAO dao;
-    private final AssuntoDAO assuntoDAO;
     private final MateriaMapper materiaMapper;
 
     @Override
