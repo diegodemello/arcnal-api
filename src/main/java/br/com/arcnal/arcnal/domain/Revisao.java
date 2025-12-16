@@ -3,6 +3,7 @@ package br.com.arcnal.arcnal.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "revisoes")
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 public class Revisao {
