@@ -1,6 +1,6 @@
 package br.com.arcnal.arcnal.dao;
 
-import br.com.arcnal.arcnal.entities.Revisao;
+import br.com.arcnal.arcnal.domain.Revisao;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

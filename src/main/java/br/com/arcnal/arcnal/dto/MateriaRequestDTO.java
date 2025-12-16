@@ -1,0 +1,9 @@
+package br.com.arcnal.arcnal.dto;
+
+import jakarta.validation.constraints.NotBlank;
+
+public record MateriaRequestDTO(
+        @NotBlank(message = "O nome da matéria não pode ser vazio.")
+        String nome
+) {
+}

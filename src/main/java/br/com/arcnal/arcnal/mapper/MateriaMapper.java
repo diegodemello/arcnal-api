@@ -1,7 +1,7 @@
 package br.com.arcnal.arcnal.mapper;
 
-import br.com.arcnal.arcnal.dtos.MateriaRequestDTO;
-import br.com.arcnal.arcnal.entities.Materia;
+import br.com.arcnal.arcnal.dto.MateriaRequestDTO;
+import br.com.arcnal.arcnal.domain.Materia;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

@@ -1,7 +1,7 @@
 package br.com.arcnal.arcnal.mapper;
 
-import br.com.arcnal.arcnal.dtos.BancaRequestDTO;
-import br.com.arcnal.arcnal.entities.Banca;
+import br.com.arcnal.arcnal.dto.BancaRequestDTO;
+import br.com.arcnal.arcnal.domain.Banca;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

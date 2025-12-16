@@ -1,8 +1,8 @@
 package br.com.arcnal.arcnal.mapper;
 
-import br.com.arcnal.arcnal.dtos.AssuntoRequestDTO;
-import br.com.arcnal.arcnal.dtos.AssuntoResponseDTO;
-import br.com.arcnal.arcnal.entities.Assunto;
+import br.com.arcnal.arcnal.dto.AssuntoRequestDTO;
+import br.com.arcnal.arcnal.dto.AssuntoResponseDTO;
+import br.com.arcnal.arcnal.domain.Assunto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

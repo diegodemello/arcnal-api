@@ -1,8 +1,8 @@
 package br.com.arcnal.arcnal.mapper;
 
-import br.com.arcnal.arcnal.dtos.UsuarioRequestDTO;
-import br.com.arcnal.arcnal.dtos.UsuarioResponseDTO;
-import br.com.arcnal.arcnal.entities.Usuario;
+import br.com.arcnal.arcnal.dto.UsuarioRequestDTO;
+import br.com.arcnal.arcnal.dto.UsuarioResponseDTO;
+import br.com.arcnal.arcnal.domain.Usuario;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
