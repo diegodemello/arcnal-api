@@ -8,6 +8,8 @@ import br.com.arcnal.arcnal.mapper.BancaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BancaServiceImpl implements IBancaService {
@@ -21,5 +23,10 @@ public class BancaServiceImpl implements IBancaService {
             throw new BancaExistenteException("Banca com nome " + dto.nome() + " já existe.");
         }
         return bancaDAO.save(bancaMapper.toEntity(dto));
+    }
+
+    @Override
+    public List<Banca> listarTodasBancas() {
+        return bancaDAO.findAll();
     }
 }
