@@ -1,9 +1,6 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.dao.AssuntoDAO;
-import br.com.arcnal.arcnal.dao.BancaDAO;
-import br.com.arcnal.arcnal.dao.MateriaDAO;
-import br.com.arcnal.arcnal.dao.QuestaoDAO;
+import br.com.arcnal.arcnal.dao.*;
 import br.com.arcnal.arcnal.dto.QuestaoRequestDTO;
 import br.com.arcnal.arcnal.dto.QuestaoResponseDTO;
 import br.com.arcnal.arcnal.domain.Assunto;
@@ -55,6 +52,17 @@ public class QuestaoServiceImpl implements IQuestaoService{
         return questaoMapper.toResponses(questaoDAO.findAll());
     }
 
+    @Override
+    public List<QuestaoResponseDTO> listarQuestoesPorFiltro(Integer idBanca, Integer ano, Integer idMateria, Integer idAssunto) {
+        Banca banca = idBanca != null ? buscarBancaPorId(idBanca) : null;
+        Materia materia = idMateria != null ? buscarMateriaPorId(idMateria) : null;
+        Assunto assunto = idAssunto != null ? buscarAssuntoPorId(idAssunto) : null;
+
+        List<Questao> questoes = questaoDAO.findAll(QuestaoSpec.porFiltros(idBanca, ano, idMateria, idAssunto));
+
+        return questaoMapper.toResponses(questoes);
+    }
+
     private void validarEnunciadoRepetido(String enunciado){
         if(questaoDAO.existsByEnunciado(enunciado)){
             throw new EnunciadoExistenteException("Enunciado já existente no sistema.");
@@ -64,6 +72,12 @@ public class QuestaoServiceImpl implements IQuestaoService{
     private void validarAno(Integer ano){
         if(ano > ANO_ATUAL){
             throw new AnoInvalidoException("Ano da questão não pode ser maior que o ano atual.");
+        }
+    }
+
+    private void validarSeExistemQuestoesComFiltrosEscolhidos(List<Questao> questoes){
+        if(questoes.isEmpty()){
+            throw new QuestaoNaoEncontradaException("Nenhuma questão encontrada com os filtros informados.");
         }
     }
 

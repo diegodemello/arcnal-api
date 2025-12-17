@@ -21,8 +21,17 @@ public class QuestaoController {
         return ResponseEntity.ok().body(questaoService.adicionarQuestao(dto));
     }
 
-    @GetMapping("/listar")
+    @GetMapping
     public ResponseEntity<List<QuestaoResponseDTO>> listarQuestoes(){
         return ResponseEntity.ok().body(questaoService.listarQuestoes());
+    }
+
+    @GetMapping("/filtro")
+    public ResponseEntity<List<QuestaoResponseDTO>> listarQuestoesPorBancaAnoMateriaAssunto(
+            @RequestParam(required = false) Integer idBanca,
+            @RequestParam(required = false) Integer ano,
+            @RequestParam(required = false) Integer idMateria,
+            @RequestParam(required = false) Integer idAssunto){
+        return ResponseEntity.ok().body(questaoService.listarQuestoesPorFiltro(idBanca, ano, idMateria, idAssunto));
     }
 }
