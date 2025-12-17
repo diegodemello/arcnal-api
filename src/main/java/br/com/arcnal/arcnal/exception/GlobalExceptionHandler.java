@@ -1,7 +1,9 @@
 package br.com.arcnal.arcnal.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -9,6 +11,24 @@ import java.time.Instant;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ExceptionResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        if(ex.getCause() instanceof InvalidFormatException){
+            InvalidFormatException cause = (InvalidFormatException) ex.getCause();
+            if(cause.getTargetType().equals(Character.class)){
+                ExceptionResponse exceptionResponse = new ExceptionResponse(
+                        HttpStatus.BAD_REQUEST.value(),
+                        "Tipo inválido para alternativa correta. Deve ser um único caractere (A, B, C, D ou E).",
+                        Instant.now()
+                );
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+            }
+        }
+        ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.BAD_REQUEST.value(),
+                "Erro na leitura da mensagem HTTP: ", Instant.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+    }
+
     @ExceptionHandler(EmailEmUsoException.class)
     public ResponseEntity<ExceptionResponse> handleEmailEmUsoException(EmailEmUsoException ex){
         ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.CONFLICT.value(), ex.getMessage(), Instant.now());
