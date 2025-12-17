@@ -9,6 +9,8 @@ import br.com.arcnal.arcnal.mapper.MateriaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -23,5 +25,10 @@ public class MateriaServiceImpl implements IMateriaService{
             throw new MateriaExistenteException("Matéria com o nome " + dto.nome() + " já existe.");
         }
         return dao.save(materiaMapper.toEntity(dto));
+    }
+
+    @Override
+    public List<Materia> listarTodasMaterias() {
+        return dao.findAll();
     }
 }
