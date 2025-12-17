@@ -7,6 +7,7 @@ import br.com.arcnal.arcnal.domain.Assunto;
 import br.com.arcnal.arcnal.domain.Banca;
 import br.com.arcnal.arcnal.domain.Materia;
 import br.com.arcnal.arcnal.domain.Questao;
+import br.com.arcnal.arcnal.dto.RespostaQuestaoResponseDTO;
 import br.com.arcnal.arcnal.exception.*;
 import br.com.arcnal.arcnal.mapper.QuestaoMapper;
 import lombok.RequiredArgsConstructor;
@@ -63,6 +64,16 @@ public class QuestaoServiceImpl implements IQuestaoService{
         return questaoMapper.toResponses(questoes);
     }
 
+    @Override
+    public RespostaQuestaoResponseDTO responderQuestao(Integer idQuestao, Character alternativaEscolhida) {
+        Questao questao = buscarQuestaoPorId(idQuestao);
+        validarAlternativaEscolhida(alternativaEscolhida);
+        if (verificarRespostaCorreta(questao, alternativaEscolhida)){
+            return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, true);
+        }
+        return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, false);
+    }
+
     private void validarEnunciadoRepetido(String enunciado){
         if(questaoDAO.existsByEnunciado(enunciado)){
             throw new EnunciadoExistenteException("Enunciado já existente no sistema.");
@@ -104,5 +115,30 @@ public class QuestaoServiceImpl implements IQuestaoService{
     private Assunto buscarAssuntoPorId(Integer id){
         return assuntoDAO.findById(id)
                 .orElseThrow(() -> new AssuntoNaoEncontradoException("ID de assunto enviado não existe."));
+    }
+
+    private Questao buscarQuestaoPorId(Integer id){
+        return questaoDAO.findById(id)
+                .orElseThrow(() -> new QuestaoNaoEncontradaException("ID de questão enviado não existe."));
+    }
+
+    private boolean verificarRespostaCorreta(Questao questao, Character alternativaEscolhida){
+        if(questao.getAlternativaCorreta().equals(alternativaEscolhida)){
+            return true;
+        }
+        return false;
+    }
+
+    private void validarAlternativaEscolhida(Character alternativaEscolhida){
+        if(alternativaEscolhida == null){
+            throw new AlternativaInvalidaException("Alternativa escolhida não pode ser nula.");
+        }
+        if(alternativaEscolhida != 'A'
+                && alternativaEscolhida != 'B'
+                && alternativaEscolhida != 'C'
+                && alternativaEscolhida != 'D'
+                && alternativaEscolhida != 'E'){
+            throw new AlternativaInvalidaException("Alternativa escolhida inválida. Deve ser uma letra entre A e E.");
+        }
     }
 }

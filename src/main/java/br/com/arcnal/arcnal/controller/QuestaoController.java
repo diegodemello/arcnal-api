@@ -2,6 +2,8 @@ package br.com.arcnal.arcnal.controller;
 
 import br.com.arcnal.arcnal.dto.QuestaoRequestDTO;
 import br.com.arcnal.arcnal.dto.QuestaoResponseDTO;
+import br.com.arcnal.arcnal.dto.RespostaQuestaoRequestDTO;
+import br.com.arcnal.arcnal.dto.RespostaQuestaoResponseDTO;
 import br.com.arcnal.arcnal.service.IQuestaoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +35,10 @@ public class QuestaoController {
             @RequestParam(required = false) Integer idMateria,
             @RequestParam(required = false) Integer idAssunto){
         return ResponseEntity.ok().body(questaoService.listarQuestoesPorFiltro(idBanca, ano, idMateria, idAssunto));
+    }
+
+    @PostMapping("/{id}/responder")
+    public ResponseEntity<RespostaQuestaoResponseDTO> responderQuestao(@Valid @PathVariable Integer id, @RequestBody RespostaQuestaoRequestDTO request){
+        return ResponseEntity.ok().body(questaoService.responderQuestao(id, request.alternativaEscolhida()));
     }
 }
