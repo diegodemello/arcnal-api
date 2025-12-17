@@ -1,0 +1,36 @@
+package br.com.arcnal.arcnal.service;
+
+
+import br.com.arcnal.arcnal.dao.BancaDAO;
+import br.com.arcnal.arcnal.dto.BancaRequestDTO;
+import br.com.arcnal.arcnal.exception.BancaExistenteException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class BancaServiceImplTest {
+
+    @InjectMocks
+    BancaServiceImpl bancaService;
+
+    @Mock
+    BancaDAO bancaDAO;
+
+    @Test
+    @DisplayName("Deve lançar exceção quando tentar adicionar uma banca que já existe")
+    public void deveLancarExcecaoQuandoAdicionarBancaComNomeExistente(){
+        BancaRequestDTO bancaRequest = new BancaRequestDTO("Escola XYZ");
+        when(bancaDAO.existsByNome(bancaRequest.nome()))
+                .thenReturn(true);
+        assertThrows(BancaExistenteException.class, () -> {
+            bancaService.adicionarBanca(bancaRequest);
+        });
+    }
+}
