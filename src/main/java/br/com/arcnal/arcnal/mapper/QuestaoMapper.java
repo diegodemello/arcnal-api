@@ -3,6 +3,7 @@ package br.com.arcnal.arcnal.mapper;
 import br.com.arcnal.arcnal.dto.QuestaoRequestDTO;
 import br.com.arcnal.arcnal.dto.QuestaoResponseDTO;
 import br.com.arcnal.arcnal.domain.Questao;
+import br.com.arcnal.arcnal.dto.ResolucaoQuestaoResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -27,4 +28,6 @@ public interface QuestaoMapper {
     @Mapping(target = "assunto", source = "assunto.nome")
     QuestaoResponseDTO toResponse(Questao entity);
     List<QuestaoResponseDTO> toResponses(List<Questao> questoes);
+
+    ResolucaoQuestaoResponseDTO toResolucaoResponse(Questao entity);
 }

@@ -7,6 +7,7 @@ import br.com.arcnal.arcnal.domain.Assunto;
 import br.com.arcnal.arcnal.domain.Banca;
 import br.com.arcnal.arcnal.domain.Materia;
 import br.com.arcnal.arcnal.domain.Questao;
+import br.com.arcnal.arcnal.dto.ResolucaoQuestaoResponseDTO;
 import br.com.arcnal.arcnal.dto.RespostaQuestaoResponseDTO;
 import br.com.arcnal.arcnal.exception.*;
 import br.com.arcnal.arcnal.mapper.QuestaoMapper;
@@ -74,6 +75,12 @@ public class QuestaoServiceImpl implements IQuestaoService{
         return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, false);
     }
 
+    @Override
+    public ResolucaoQuestaoResponseDTO obterResolucaoQuestao(Integer idQuestao) {
+        Questao questao = buscarQuestaoPorId(idQuestao);
+        return questaoMapper.toResolucaoResponse(questao);
+    }
+
     private void validarEnunciadoRepetido(String enunciado){
         if(questaoDAO.existsByEnunciado(enunciado)){
             throw new EnunciadoExistenteException("Enunciado já existente no sistema.");
@@ -83,12 +90,6 @@ public class QuestaoServiceImpl implements IQuestaoService{
     private void validarAno(Integer ano){
         if(ano > ANO_ATUAL){
             throw new AnoInvalidoException("Ano da questão não pode ser maior que o ano atual.");
-        }
-    }
-
-    private void validarSeExistemQuestoesComFiltrosEscolhidos(List<Questao> questoes){
-        if(questoes.isEmpty()){
-            throw new QuestaoNaoEncontradaException("Nenhuma questão encontrada com os filtros informados.");
         }
     }
 
