@@ -24,7 +24,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<UsuarioResponseDTO>> listarUsuarios(){
-        return ResponseEntity.ok().body(usuarioService.listarUsuarios());
+    public ResponseEntity<List<UsuarioResponseDTO>> listarUsuarios(@RequestParam Integer pagina, Integer objetos){
+        return ResponseEntity.ok().body(usuarioService.listarUsuarios(pagina, objetos));
     }
 }

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface IUsuarioService {
     void cadastrarUsuario(UsuarioRequestDTO dto, String enderecoIp);
-    List<UsuarioResponseDTO> listarUsuarios();
+    List<UsuarioResponseDTO> listarUsuarios(Integer pagina, Integer objetos);
 }

@@ -8,6 +8,7 @@ import br.com.arcnal.arcnal.domain.enums.Cargo;
 import br.com.arcnal.arcnal.exception.EmailEmUsoException;
 import br.com.arcnal.arcnal.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,8 +31,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
-    public List<UsuarioResponseDTO> listarUsuarios() {
-        return usuarioMapper.toResponse(usuarioDAO.findAll());
+    public List<UsuarioResponseDTO> listarUsuarios(Integer pagina, Integer objetos) {
+        return usuarioMapper.toResponse(usuarioDAO.findAll(PageRequest.of(pagina, objetos)).getContent());
     }
 
     private void validarEmailUnico(String email){
