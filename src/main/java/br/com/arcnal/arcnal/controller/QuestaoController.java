@@ -21,8 +21,8 @@ public class QuestaoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<QuestaoResponseDTO>> listarQuestoes(){
-        return ResponseEntity.ok().body(questaoService.listarQuestoes());
+    public ResponseEntity<List<QuestaoResponseDTO>> listarQuestoes(@RequestParam Integer pagina, Integer objetos){
+        return ResponseEntity.ok().body(questaoService.listarQuestoes(pagina, objetos));
     }
 
     @GetMapping("/filtro")

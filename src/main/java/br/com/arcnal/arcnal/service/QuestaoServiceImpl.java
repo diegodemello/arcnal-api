@@ -12,6 +12,8 @@ import br.com.arcnal.arcnal.dto.RespostaQuestaoResponseDTO;
 import br.com.arcnal.arcnal.exception.*;
 import br.com.arcnal.arcnal.mapper.QuestaoMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -50,8 +52,8 @@ public class QuestaoServiceImpl implements IQuestaoService{
     }
 
     @Override
-    public List<QuestaoResponseDTO> listarQuestoes() {
-        return questaoMapper.toResponses(questaoDAO.findAll());
+    public List<QuestaoResponseDTO> listarQuestoes(Integer pagina, Integer objetos) {
+        return questaoMapper.toResponses(questaoDAO.findAll(PageRequest.of(pagina, objetos)).getContent());
     }
 
     @Override
