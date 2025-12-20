@@ -14,6 +14,8 @@ import br.com.arcnal.arcnal.mapper.QuestaoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -57,12 +59,14 @@ public class QuestaoServiceImpl implements IQuestaoService{
     }
 
     @Override
-    public List<QuestaoResponseDTO> listarQuestoesPorFiltro(Integer idBanca, Integer ano, Integer idMateria, Integer idAssunto) {
+    public List<QuestaoResponseDTO> listarQuestoesPorFiltro(Integer pagina, Integer objetos, Integer idBanca, Integer ano, Integer idMateria, Integer idAssunto) {
         Banca banca = idBanca != null ? buscarBancaPorId(idBanca) : null;
         Materia materia = idMateria != null ? buscarMateriaPorId(idMateria) : null;
         Assunto assunto = idAssunto != null ? buscarAssuntoPorId(idAssunto) : null;
 
-        List<Questao> questoes = questaoDAO.findAll(QuestaoSpec.porFiltros(idBanca, ano, idMateria, idAssunto));
+        Pageable pageable = PageRequest.of(pagina, objetos);
+
+        List<Questao> questoes = questaoDAO.findAll(QuestaoSpec.porFiltros(idBanca, ano, idMateria, idAssunto), pageable).getContent();
 
         return questaoMapper.toResponses(questoes);
     }
