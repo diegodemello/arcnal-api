@@ -12,6 +12,7 @@ import br.com.arcnal.arcnal.dto.RespostaQuestaoResponseDTO;
 import br.com.arcnal.arcnal.exception.*;
 import br.com.arcnal.arcnal.mapper.QuestaoMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class QuestaoServiceImpl implements IQuestaoService{
 
@@ -48,6 +50,7 @@ public class QuestaoServiceImpl implements IQuestaoService{
         questao.setMateria(materia);
         questao.setAssunto(assunto);
         questaoDAO.save(questao);
+        log.info("Questão criada com id = " + questao.getId());
 
         QuestaoResponseDTO questaoResponseDTO = questaoMapper.toResponse(questao);
         return questaoResponseDTO;
@@ -75,6 +78,7 @@ public class QuestaoServiceImpl implements IQuestaoService{
     public RespostaQuestaoResponseDTO responderQuestao(Integer idQuestao, Character alternativaEscolhida) {
         Questao questao = buscarQuestaoPorId(idQuestao);
         validarAlternativaEscolhida(alternativaEscolhida);
+        log.info("Questão com id = " + idQuestao + " foi respondida.");
         if (verificarRespostaCorreta(questao, alternativaEscolhida)){
             return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, true);
         }
@@ -84,6 +88,7 @@ public class QuestaoServiceImpl implements IQuestaoService{
     @Override
     public ResolucaoQuestaoResponseDTO obterResolucaoQuestao(Integer idQuestao) {
         Questao questao = buscarQuestaoPorId(idQuestao);
+        log.info("Questão com id = " + idQuestao + " foi visualizada a resolução.");
         return questaoMapper.toResolucaoResponse(questao);
     }
 

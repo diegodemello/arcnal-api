@@ -8,12 +8,14 @@ import br.com.arcnal.arcnal.domain.enums.Cargo;
 import br.com.arcnal.arcnal.exception.EmailEmUsoException;
 import br.com.arcnal.arcnal.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UsuarioServiceImpl implements IUsuarioService {
 
@@ -23,11 +25,11 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Override
     public void cadastrarUsuario(UsuarioRequestDTO dto, String enderecoIp) {
         validarEmailUnico(dto.email());
-
         Usuario usuario = usuarioMapper.toEntity(dto);
         usuario.setEnderecoIp(enderecoIp);
         usuario.setCargo(Cargo.USUARIO);
         usuarioDAO.save(usuario);
+        log.info("Usuário criado com ID = " + usuario.getId() + " e email = " + usuario.getEmail());
     }
 
     @Override
@@ -37,6 +39,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     private void validarEmailUnico(String email){
         if(usuarioDAO.existsByEmail(email)){
+            log.warn("Usuário tentando criar conta com e-mail repetido! E-mail = " + email);
             throw new EmailEmUsoException("O email " + email + " já está em uso.");
         }
     }
