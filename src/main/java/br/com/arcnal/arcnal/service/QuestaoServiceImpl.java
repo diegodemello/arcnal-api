@@ -80,9 +80,9 @@ public class QuestaoServiceImpl implements IQuestaoService{
         validarAlternativaEscolhida(alternativaEscolhida);
         log.info("Questão com id = " + idQuestao + " foi respondida.");
         if (verificarRespostaCorreta(questao, alternativaEscolhida)){
-            return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, true);
+            return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, true, questao.getAlternativaCorreta());
         }
-        return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, false);
+        return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, false, questao.getAlternativaCorreta());
     }
 
     @Override
