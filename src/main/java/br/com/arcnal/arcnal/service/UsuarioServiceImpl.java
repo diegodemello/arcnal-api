@@ -10,6 +10,7 @@ import br.com.arcnal.arcnal.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
         Usuario usuario = usuarioMapper.toEntity(dto);
         usuario.setEnderecoIp(enderecoIp);
         usuario.setCargo(Cargo.USUARIO);
+        String senhaCriptografada = new BCryptPasswordEncoder().encode(dto.senha());
+        usuario.setSenha(senhaCriptografada);
         usuarioDAO.save(usuario);
         log.info("Usuário criado com ID = " + usuario.getId() + " e email = " + usuario.getEmail());
     }
