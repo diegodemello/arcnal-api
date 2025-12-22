@@ -12,12 +12,18 @@ import br.com.arcnal.arcnal.dto.RespostaQuestaoResponseDTO;
 import br.com.arcnal.arcnal.exception.*;
 import br.com.arcnal.arcnal.mapper.QuestaoMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class QuestaoServiceImpl implements IQuestaoService{
 
@@ -44,23 +50,26 @@ public class QuestaoServiceImpl implements IQuestaoService{
         questao.setMateria(materia);
         questao.setAssunto(assunto);
         questaoDAO.save(questao);
+        log.info("Questão criada com id = " + questao.getId());
 
         QuestaoResponseDTO questaoResponseDTO = questaoMapper.toResponse(questao);
         return questaoResponseDTO;
     }
 
     @Override
-    public List<QuestaoResponseDTO> listarQuestoes() {
-        return questaoMapper.toResponses(questaoDAO.findAll());
+    public List<QuestaoResponseDTO> listarQuestoes(Integer pagina, Integer objetos) {
+        return questaoMapper.toResponses(questaoDAO.findAll(PageRequest.of(pagina, objetos)).getContent());
     }
 
     @Override
-    public List<QuestaoResponseDTO> listarQuestoesPorFiltro(Integer idBanca, Integer ano, Integer idMateria, Integer idAssunto) {
+    public List<QuestaoResponseDTO> listarQuestoesPorFiltro(Integer pagina, Integer objetos, Integer idBanca, Integer ano, Integer idMateria, Integer idAssunto) {
         Banca banca = idBanca != null ? buscarBancaPorId(idBanca) : null;
         Materia materia = idMateria != null ? buscarMateriaPorId(idMateria) : null;
         Assunto assunto = idAssunto != null ? buscarAssuntoPorId(idAssunto) : null;
 
-        List<Questao> questoes = questaoDAO.findAll(QuestaoSpec.porFiltros(idBanca, ano, idMateria, idAssunto));
+        Pageable pageable = PageRequest.of(pagina, objetos);
+
+        List<Questao> questoes = questaoDAO.findAll(QuestaoSpec.porFiltros(idBanca, ano, idMateria, idAssunto), pageable).getContent();
 
         return questaoMapper.toResponses(questoes);
     }
@@ -69,15 +78,17 @@ public class QuestaoServiceImpl implements IQuestaoService{
     public RespostaQuestaoResponseDTO responderQuestao(Integer idQuestao, Character alternativaEscolhida) {
         Questao questao = buscarQuestaoPorId(idQuestao);
         validarAlternativaEscolhida(alternativaEscolhida);
+        log.info("Questão com id = " + idQuestao + " foi respondida.");
         if (verificarRespostaCorreta(questao, alternativaEscolhida)){
-            return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, true);
+            return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, true, questao.getAlternativaCorreta());
         }
-        return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, false);
+        return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, false, questao.getAlternativaCorreta());
     }
 
     @Override
     public ResolucaoQuestaoResponseDTO obterResolucaoQuestao(Integer idQuestao) {
         Questao questao = buscarQuestaoPorId(idQuestao);
+        log.info("Questão com id = " + idQuestao + " foi visualizada a resolução.");
         return questaoMapper.toResolucaoResponse(questao);
     }
 

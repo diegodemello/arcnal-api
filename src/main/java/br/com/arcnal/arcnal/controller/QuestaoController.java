@@ -21,17 +21,18 @@ public class QuestaoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<QuestaoResponseDTO>> listarQuestoes(){
-        return ResponseEntity.ok().body(questaoService.listarQuestoes());
+    public ResponseEntity<List<QuestaoResponseDTO>> listarQuestoes(@RequestParam Integer pagina, Integer objetos){
+        return ResponseEntity.ok().body(questaoService.listarQuestoes(pagina, objetos));
     }
 
     @GetMapping("/filtro")
     public ResponseEntity<List<QuestaoResponseDTO>> listarQuestoesPorBancaAnoMateriaAssunto(
+            @RequestParam Integer pagina, Integer objetos,
             @RequestParam(required = false) Integer idBanca,
             @RequestParam(required = false) Integer ano,
             @RequestParam(required = false) Integer idMateria,
             @RequestParam(required = false) Integer idAssunto){
-        return ResponseEntity.ok().body(questaoService.listarQuestoesPorFiltro(idBanca, ano, idMateria, idAssunto));
+        return ResponseEntity.ok().body(questaoService.listarQuestoesPorFiltro(pagina, objetos, idBanca, ano, idMateria, idAssunto));
     }
 
     @PostMapping("/{id}/responder")
