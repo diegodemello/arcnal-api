@@ -21,6 +21,15 @@ public class SecurityConfigurations {
     @Autowired
     SecurityFilter securityFilter;
 
+    @Autowired
+    CustomAuthEntryPoint customAuthEntryPoint;
+
+    @Autowired
+    CustomBearerAuthEntryPoint customBearerAuthEntryPoint;
+
+    @Autowired
+    CustomBearerAccessDeniedHandler customBearerAccessDeniedHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -29,10 +38,14 @@ public class SecurityConfigurations {
                         SessionCreationPolicy.STATELESS
                 ))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, "/questao/*/responder").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/questao/*/resolucao").authenticated()
+
                         .requestMatchers(HttpMethod.POST, "/questao").hasRole("PROFESSOR")
                         .requestMatchers(HttpMethod.POST, "/materia").hasRole("PROFESSOR")
                         .requestMatchers(HttpMethod.POST, "/banca").hasRole("PROFESSOR")
                         .requestMatchers(HttpMethod.POST, "/assunto").hasRole("PROFESSOR")
+
                         .requestMatchers(HttpMethod.GET, "/usuario/listar").hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.GET, "/questao", "/questao/filtro").permitAll()
@@ -43,6 +56,10 @@ public class SecurityConfigurations {
 
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(customAuthEntryPoint))
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(this.customBearerAuthEntryPoint)
+                        .accessDeniedHandler(customBearerAccessDeniedHandler))
                 .build();
     }
 
