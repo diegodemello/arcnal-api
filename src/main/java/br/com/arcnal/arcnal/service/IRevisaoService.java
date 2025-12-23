@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IRevisaoService {
-    void criarRevisao(RevisaoRequestDTO dto);
+    void criarRevisao(RevisaoRequestDTO dto, String emailUsuario);
     List<RevisaoResponseDTO> listarRevisoesPorUsuario(UUID idUsuario);
 }

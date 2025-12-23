@@ -29,8 +29,9 @@ public class RevisaoServiceImpl implements IRevisaoService {
     private final QuestaoDAO questaoDAO;
 
     @Override
-    public void criarRevisao(RevisaoRequestDTO dto) {
-        Usuario usuario = buscarUsuarioPorId(dto.idUsuario());
+    public void criarRevisao(RevisaoRequestDTO dto, String email) {
+
+        Usuario usuario = buscarUsuarioPorEmail(email);
         List<Questao> questoes = buscarEValidarQuestoes(dto.idQuestoes());
 
         Revisao revisao = revisaoMapper.toEntity(dto);
@@ -48,6 +49,10 @@ public class RevisaoServiceImpl implements IRevisaoService {
         validarRevisoesEncontradas(revisoes);
 
         return revisaoMapper.toResponse(revisoes);
+    }
+
+    private Usuario buscarUsuarioPorEmail(String email){
+        return usuarioDAO.findAllByEmail(email);
     }
 
     private Usuario buscarUsuarioPorId(UUID id){

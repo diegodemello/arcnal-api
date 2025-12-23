@@ -6,6 +6,8 @@ import br.com.arcnal.arcnal.service.IRevisaoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,13 +20,19 @@ public class RevisaoController {
     IRevisaoService revisaoService;
 
     @PostMapping
-    public ResponseEntity<Void> criarRevisao(@Valid @RequestBody RevisaoRequestDTO dto){
-        revisaoService.criarRevisao(dto);
+    public ResponseEntity<Void> criarRevisao(@Valid @RequestBody RevisaoRequestDTO dto,
+                                             @AuthenticationPrincipal UserDetails userDetails){
+        String emailUsuario = extrairEmailDoToken(userDetails);
+        revisaoService.criarRevisao(dto, emailUsuario);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/listar/{idUsuario}")
     public ResponseEntity<List<RevisaoResponseDTO>> listarRevisoesPorUsuario(@PathVariable UUID idUsuario){
         return ResponseEntity.ok().body(revisaoService.listarRevisoesPorUsuario(idUsuario));
+    }
+
+    private String extrairEmailDoToken(UserDetails userDetails){
+        return userDetails.getUsername();
     }
 }
