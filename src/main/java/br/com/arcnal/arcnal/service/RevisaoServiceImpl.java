@@ -52,7 +52,8 @@ public class RevisaoServiceImpl implements IRevisaoService {
     }
 
     private Usuario buscarUsuarioPorEmail(String email){
-        return usuarioDAO.findAllByEmail(email);
+        return usuarioDAO.findAllByEmail(email)
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado com o Email: " + email));
     }
 
     private Usuario buscarUsuarioPorId(UUID id){

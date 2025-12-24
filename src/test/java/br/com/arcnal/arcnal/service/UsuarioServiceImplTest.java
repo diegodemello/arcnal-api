@@ -73,7 +73,10 @@ class UsuarioServiceImplTest {
         when(usuarioMapper.toResponse(usuarios))
                 .thenReturn(usuarioResponse);
 
-        List<UsuarioResponseDTO> resultado = usuarioService.listarUsuarios();
+        Integer pagina = 0;
+        Integer objetos = 2;
+
+        List<UsuarioResponseDTO> resultado = usuarioService.listarUsuarios(pagina, objetos);
         assertNotNull(resultado);
     }
 }
