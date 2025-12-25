@@ -24,6 +24,7 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("arcnal-api")
                     .withSubject(usuario.getEmail())
+                    .withClaim("role", usuario.getCargo().toString())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
             return token;
@@ -43,6 +44,16 @@ public class TokenService {
         } catch(JWTVerificationException ex){
             return "";
         }
+    }
+
+    public String getRole(String token){
+        Algorithm algorithm = Algorithm.HMAC256(secret);
+        return JWT.require(algorithm)
+                .withIssuer("arcnal-api")
+                .build()
+                .verify(token)
+                .getClaim("role")
+                .asString();
     }
 
     private Instant generateExpirationDate(){

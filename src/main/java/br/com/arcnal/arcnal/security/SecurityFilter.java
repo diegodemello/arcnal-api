@@ -7,12 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -25,15 +27,21 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var token = recuperarToken(request);
-        if(token != null){
+        if(token != null && SecurityContextHolder.getContext().getAuthentication() == null){
             var email = tokenService.validarToken(token);
-            if(email != null && !email.isEmpty()){
-                UserDetails usuario = usuarioDAO.findByEmail(email);
+            var role = tokenService.getRole(token);
 
-                if(usuario != null){
-                    var autenticacao = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(autenticacao);
-                }
+            if(email != null  && role != null){
+                var autorizacoes = List.of(
+                        new SimpleGrantedAuthority("ROLE_" + role)
+                );
+                var autenticacao =
+                        new UsernamePasswordAuthenticationToken(
+                                email,
+                                null,
+                                autorizacoes
+                        );
+                SecurityContextHolder.getContext().setAuthentication(autenticacao);
             }
         }
         filterChain.doFilter(request, response);
