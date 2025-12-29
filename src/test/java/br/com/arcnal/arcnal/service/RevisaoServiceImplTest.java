@@ -1,13 +1,14 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.dao.QuestaoDAO;
-import br.com.arcnal.arcnal.dao.RevisaoDAO;
-import br.com.arcnal.arcnal.dao.UsuarioDAO;
-import br.com.arcnal.arcnal.domain.Usuario;
-import br.com.arcnal.arcnal.dto.RevisaoRequestDTO;
-import br.com.arcnal.arcnal.exception.QuestaoNaoEncontradaException;
-import br.com.arcnal.arcnal.exception.RevisoesExistentesException;
-import br.com.arcnal.arcnal.exception.UsuarioNaoEncontradoException;
+import br.com.arcnal.arcnal.application.service.RevisaoServiceImpl;
+import br.com.arcnal.arcnal.domain.repositories.QuestaoRepository;
+import br.com.arcnal.arcnal.domain.repositories.RevisaoRepository;
+import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
+import br.com.arcnal.arcnal.domain.entities.Usuario;
+import br.com.arcnal.arcnal.application.dto.RevisaoRequestDTO;
+import br.com.arcnal.arcnal.domain.exception.QuestaoNaoEncontradaException;
+import br.com.arcnal.arcnal.domain.exception.RevisoesExistentesException;
+import br.com.arcnal.arcnal.domain.exception.UsuarioNaoEncontradoException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,21 +27,21 @@ class RevisaoServiceImplTest {
     RevisaoServiceImpl revisaoService;
 
     @Mock
-    UsuarioDAO usuarioDAO;
+    UsuarioRepository usuarioRepository;
     @Mock
-    QuestaoDAO questaoDAO;
+    QuestaoRepository questaoRepository;
     @Mock
-    RevisaoDAO revisaoDAO;
+    RevisaoRepository revisaoRepository;
 
     RevisaoRequestDTO request;
     String idUsuario= "e486086c-0b6b-47df-9d69-2ae1f3097563";
     List<Integer> idQuestoes = Arrays.asList(1, 2, 3, 4, 5);
+    String emailUsuario = "diego@arcnal.com.br";
 
     @BeforeEach
     public void setUp() {
         request = new RevisaoRequestDTO(
                 "Revisão do Diego",
-                UUID.fromString(idUsuario),
                 idQuestoes
         );
     }
@@ -48,44 +49,44 @@ class RevisaoServiceImplTest {
     @Test
     @DisplayName("Deve lançar exceção quando usuário inexistente for consultado")
     public void deveRetornarUsuarioNaoEncontradoExceptionQuandoUsuarioInexistente() {
-        Mockito.when(usuarioDAO.findById(request.idUsuario()))
+        Mockito.when(usuarioRepository.findAllByEmail(emailUsuario))
                 .thenReturn(Optional.empty());
         Assertions.assertThrows(UsuarioNaoEncontradoException.class, () -> {
-           revisaoService.criarRevisao(request);
+           revisaoService.criarRevisao(request, emailUsuario);
         });
     }
 
     @Test
     @DisplayName("Deve lançar exceção quando questão inexistente for consultada")
     public void deveRetornarQuestaoNaoEncontradaExceptionQuandoQuestaoInexistente() {
-        Mockito.when(usuarioDAO.findById(request.idUsuario()))
+        Mockito.when(usuarioRepository.findAllByEmail(emailUsuario))
                 .thenReturn(Optional.of(new Usuario()));
-        Mockito.when(questaoDAO.findAllById(request.idQuestoes()))
+        Mockito.when(questaoRepository.findAllById(request.idQuestoes()))
                 .thenReturn(Collections.emptyList());
         Assertions.assertThrows(QuestaoNaoEncontradaException.class, () -> {
-           revisaoService.criarRevisao(request);
+           revisaoService.criarRevisao(request, emailUsuario);
         });
     }
 
     @Test
     @DisplayName("Deve lançar exceção quando usuário inexistente for consultado")
     public void deveRetornarUsuarioNaoEncontradoExceptionQuandoUsuarioInexistenteNoListar() {
-        Mockito.when(usuarioDAO.findById(request.idUsuario()))
-                .thenReturn(Optional.empty());
+        Mockito.when(usuarioRepository.findById(UUID.fromString(idUsuario)))
+                        .thenReturn(Optional.empty());
         Assertions.assertThrows(UsuarioNaoEncontradoException.class, () -> {
-            revisaoService.listarRevisoesPorUsuario(request.idUsuario());
+            revisaoService.listarRevisoesPorUsuario(UUID.fromString(idUsuario));
         });
     }
 
     @Test
     @DisplayName("Deve lançar exceção quando não houver revisões para o usuário")
     public void deveRetornarRevisoesExistentesExceptionQuandoNaoHouverRevisoes() {
-        Mockito.when(usuarioDAO.findById(request.idUsuario()))
+        Mockito.when(usuarioRepository.findById(UUID.fromString(idUsuario)))
                 .thenReturn(Optional.of(new Usuario()));
-        Mockito.when(revisaoDAO.findAllByUsuarioId(request.idUsuario()))
+        Mockito.when(revisaoRepository.findAllByUsuarioId(UUID.fromString(idUsuario)))
                 .thenReturn(Collections.emptyList());
         Assertions.assertThrows(RevisoesExistentesException.class, () -> {
-           revisaoService.listarRevisoesPorUsuario(request.idUsuario());
+           revisaoService.listarRevisoesPorUsuario(UUID.fromString(idUsuario));
         });
     }
 }
