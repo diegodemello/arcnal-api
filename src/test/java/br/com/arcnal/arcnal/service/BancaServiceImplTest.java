@@ -1,9 +1,10 @@
 package br.com.arcnal.arcnal.service;
 
 
-import br.com.arcnal.arcnal.dao.BancaRepository;
-import br.com.arcnal.arcnal.dto.BancaRequestDTO;
-import br.com.arcnal.arcnal.exception.BancaExistenteException;
+import br.com.arcnal.arcnal.application.service.BancaServiceImpl;
+import br.com.arcnal.arcnal.domain.repositories.BancaRepository;
+import br.com.arcnal.arcnal.application.dto.BancaRequestDTO;
+import br.com.arcnal.arcnal.domain.exception.BancaExistenteException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

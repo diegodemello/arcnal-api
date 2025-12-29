@@ -1,13 +1,14 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.dao.QuestaoRepository;
-import br.com.arcnal.arcnal.dao.RevisaoRepository;
-import br.com.arcnal.arcnal.dao.UsuarioRepository;
-import br.com.arcnal.arcnal.domain.Usuario;
-import br.com.arcnal.arcnal.dto.RevisaoRequestDTO;
-import br.com.arcnal.arcnal.exception.QuestaoNaoEncontradaException;
-import br.com.arcnal.arcnal.exception.RevisoesExistentesException;
-import br.com.arcnal.arcnal.exception.UsuarioNaoEncontradoException;
+import br.com.arcnal.arcnal.application.service.RevisaoServiceImpl;
+import br.com.arcnal.arcnal.domain.repositories.QuestaoRepository;
+import br.com.arcnal.arcnal.domain.repositories.RevisaoRepository;
+import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
+import br.com.arcnal.arcnal.domain.entities.Usuario;
+import br.com.arcnal.arcnal.application.dto.RevisaoRequestDTO;
+import br.com.arcnal.arcnal.domain.exception.QuestaoNaoEncontradaException;
+import br.com.arcnal.arcnal.domain.exception.RevisoesExistentesException;
+import br.com.arcnal.arcnal.domain.exception.UsuarioNaoEncontradoException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

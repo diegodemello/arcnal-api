@@ -1,0 +1,15 @@
+package br.com.arcnal.arcnal.application.mapper;
+
+import br.com.arcnal.arcnal.application.dto.MateriaRequestDTO;
+import br.com.arcnal.arcnal.domain.entities.Materia;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
+
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.ERROR)
+public interface MateriaMapper {
+    @Mapping(target = "id", ignore = true)
+    Materia toEntity(MateriaRequestDTO dto);
+}
