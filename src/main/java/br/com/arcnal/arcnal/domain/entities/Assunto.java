@@ -1,5 +1,6 @@
 package br.com.arcnal.arcnal.domain.entities;
 
+import br.com.arcnal.arcnal.domain.valueobjects.Nome;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,5 +18,10 @@ public class Assunto {
     @ManyToOne
     @JoinColumn(name = "id_materia")
     private Materia materia;
-    private String nome;
+    @Embedded
+    private Nome nome;
+
+    public String getNome(){
+        return nome.getNome();
+    }
 }

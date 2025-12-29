@@ -1,5 +1,6 @@
 package br.com.arcnal.arcnal.domain.entities;
 
+import br.com.arcnal.arcnal.domain.valueobjects.Nome;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,5 +14,10 @@ public class Banca {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String nome;
+    @Embedded
+    private Nome nome;
+
+    public String getNome(){
+        return nome.getNome();
+    }
 }
