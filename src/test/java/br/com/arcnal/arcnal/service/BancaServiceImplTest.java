@@ -1,9 +1,10 @@
 package br.com.arcnal.arcnal.service;
 
 
-import br.com.arcnal.arcnal.dao.BancaDAO;
-import br.com.arcnal.arcnal.dto.BancaRequestDTO;
-import br.com.arcnal.arcnal.exception.BancaExistenteException;
+import br.com.arcnal.arcnal.application.service.BancaServiceImpl;
+import br.com.arcnal.arcnal.domain.repositories.BancaRepository;
+import br.com.arcnal.arcnal.application.dto.BancaRequestDTO;
+import br.com.arcnal.arcnal.domain.exception.BancaExistenteException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,13 +22,13 @@ class BancaServiceImplTest {
     BancaServiceImpl bancaService;
 
     @Mock
-    BancaDAO bancaDAO;
+    BancaRepository bancaRepository;
 
     @Test
     @DisplayName("Deve lançar exceção quando tentar adicionar uma banca que já existe")
     public void deveLancarExcecaoQuandoAdicionarBancaComNomeExistente(){
         BancaRequestDTO bancaRequest = new BancaRequestDTO("Escola XYZ");
-        when(bancaDAO.existsByNome(bancaRequest.nome()))
+        when(bancaRepository.existsByNome(bancaRequest.nome()))
                 .thenReturn(true);
         assertThrows(BancaExistenteException.class, () -> {
             bancaService.adicionarBanca(bancaRequest);

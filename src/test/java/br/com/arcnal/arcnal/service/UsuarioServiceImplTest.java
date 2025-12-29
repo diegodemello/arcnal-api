@@ -1,13 +1,14 @@
 package br.com.arcnal.arcnal.service;
 
 
-import br.com.arcnal.arcnal.dao.UsuarioDAO;
-import br.com.arcnal.arcnal.domain.Usuario;
+import br.com.arcnal.arcnal.application.service.UsuarioServiceImpl;
+import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
+import br.com.arcnal.arcnal.domain.entities.Usuario;
 import br.com.arcnal.arcnal.domain.enums.Cargo;
-import br.com.arcnal.arcnal.dto.UsuarioRequestDTO;
-import br.com.arcnal.arcnal.dto.UsuarioResponseDTO;
-import br.com.arcnal.arcnal.exception.EmailEmUsoException;
-import br.com.arcnal.arcnal.mapper.UsuarioMapper;
+import br.com.arcnal.arcnal.application.dto.UsuarioRequestDTO;
+import br.com.arcnal.arcnal.application.dto.UsuarioResponseDTO;
+import br.com.arcnal.arcnal.domain.exception.EmailEmUsoException;
+import br.com.arcnal.arcnal.application.mapper.UsuarioMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class UsuarioServiceImplTest {
     private UsuarioServiceImpl usuarioService;
 
     @Mock
-    private UsuarioDAO usuarioDAO;
+    private UsuarioRepository usuarioRepository;
 
     @Mock
     private UsuarioMapper usuarioMapper;
@@ -54,7 +55,7 @@ class UsuarioServiceImplTest {
     @Test
     @DisplayName("Deve retornar EmailEmUsoException quando cadastrar usuário com email já existente")
     public void deveRetornarEmailEmUsoExceptionQuandoCadastrarUsuarioComEmailJaExistente() {
-        when(usuarioDAO.existsByEmail(dto.email()))
+        when(usuarioRepository.existsByEmail(dto.email()))
                 .thenReturn(true);
         assertThrows(EmailEmUsoException.class, () -> {
             usuarioService.cadastrarUsuario(dto, "0:0:0:0:0:0:0:1");
@@ -68,12 +69,15 @@ class UsuarioServiceImplTest {
         List<Usuario> usuarios = Collections.singletonList(new Usuario());
         List<UsuarioResponseDTO> usuarioResponse = Collections.singletonList(usuarioResponseDTO);
 
-        when(usuarioDAO.findAll())
+        when(usuarioRepository.findAll())
                 .thenReturn(usuarios);
         when(usuarioMapper.toResponse(usuarios))
                 .thenReturn(usuarioResponse);
 
-        List<UsuarioResponseDTO> resultado = usuarioService.listarUsuarios();
+        Integer pagina = 0;
+        Integer objetos = 2;
+
+        List<UsuarioResponseDTO> resultado = usuarioService.listarUsuarios(pagina, objetos);
         assertNotNull(resultado);
     }
 }
