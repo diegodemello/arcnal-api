@@ -1,7 +1,7 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.dao.AssuntoDAO;
-import br.com.arcnal.arcnal.dao.MateriaDAO;
+import br.com.arcnal.arcnal.dao.AssuntoRepository;
+import br.com.arcnal.arcnal.dao.MateriaRepository;
 import br.com.arcnal.arcnal.dto.AssuntoRequestDTO;
 import br.com.arcnal.arcnal.dto.AssuntoResponseDTO;
 import br.com.arcnal.arcnal.dto.AssuntosMateriaResponseDTO;
@@ -18,8 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AssuntoServiceImpl implements IAssuntoService{
 
-    private final AssuntoDAO assuntoDAO;
-    private final MateriaDAO materiaDAO;
+    private final AssuntoRepository assuntoRepository;
+    private final MateriaRepository materiaRepository;
     private final AssuntoMapper assuntoMapper;
 
     @Override
@@ -28,7 +28,7 @@ public class AssuntoServiceImpl implements IAssuntoService{
 
         Assunto assunto = assuntoMapper.toEntity(dto);
         assunto.setMateria(materia);
-        assuntoDAO.save(assunto);
+        assuntoRepository.save(assunto);
 
         return assuntoMapper.toResponse(assunto);
     }
@@ -37,7 +37,7 @@ public class AssuntoServiceImpl implements IAssuntoService{
     public AssuntosMateriaResponseDTO listarAssuntosPorMateria(Integer idMateria) {
         Materia materia = buscarMateriaPorId(idMateria);
 
-        List<AssuntoResponseDTO> assuntos = assuntoDAO.findAllByMateria_Id(materia.getId())
+        List<AssuntoResponseDTO> assuntos = assuntoRepository.findAllByMateria_Id(materia.getId())
                 .stream()
                 .map(assuntoMapper::toResponse)
                 .toList();
@@ -46,7 +46,7 @@ public class AssuntoServiceImpl implements IAssuntoService{
     }
 
     public Materia buscarMateriaPorId(Integer idMateria){
-        return materiaDAO.findById(idMateria)
+        return materiaRepository.findById(idMateria)
                 .orElseThrow(() -> new MateriaNaoEncontradaException("Matéria com ID " + idMateria + " não encontrada."));
     }
 }

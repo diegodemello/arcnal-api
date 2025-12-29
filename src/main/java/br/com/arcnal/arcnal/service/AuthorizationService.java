@@ -1,6 +1,6 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.dao.UsuarioDAO;
+import br.com.arcnal.arcnal.dao.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 public class AuthorizationService implements UserDetailsService {
 
     @Autowired
-    UsuarioDAO usuarioDAO;
+    UsuarioRepository usuarioRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return usuarioDAO.findByEmail(email);
+        return usuarioRepository.findByEmail(email);
     }
 }

@@ -1,6 +1,6 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.dao.BancaDAO;
+import br.com.arcnal.arcnal.dao.BancaRepository;
 import br.com.arcnal.arcnal.dto.BancaRequestDTO;
 import br.com.arcnal.arcnal.domain.Banca;
 import br.com.arcnal.arcnal.exception.BancaExistenteException;
@@ -14,19 +14,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BancaServiceImpl implements IBancaService {
 
-    private final BancaDAO bancaDAO;
+    private final BancaRepository bancaRepository;
     private final BancaMapper bancaMapper;
 
     @Override
     public Banca adicionarBanca(BancaRequestDTO dto) {
-        if(bancaDAO.existsByNome(dto.nome())){
+        if(bancaRepository.existsByNome(dto.nome())){
             throw new BancaExistenteException("Banca com nome " + dto.nome() + " já existe.");
         }
-        return bancaDAO.save(bancaMapper.toEntity(dto));
+        return bancaRepository.save(bancaMapper.toEntity(dto));
     }
 
     @Override
     public List<Banca> listarTodasBancas() {
-        return bancaDAO.findAll();
+        return bancaRepository.findAll();
     }
 }

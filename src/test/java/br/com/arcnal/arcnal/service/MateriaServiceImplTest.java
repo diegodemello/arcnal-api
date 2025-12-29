@@ -1,6 +1,6 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.dao.MateriaDAO;
+import br.com.arcnal.arcnal.dao.MateriaRepository;
 import br.com.arcnal.arcnal.dto.MateriaRequestDTO;
 import br.com.arcnal.arcnal.exception.MateriaExistenteException;
 import org.junit.jupiter.api.DisplayName;
@@ -20,13 +20,13 @@ class MateriaServiceImplTest {
     MateriaServiceImpl materiaService;
 
     @Mock
-    MateriaDAO materiaDAO;
+    MateriaRepository materiaRepository;
 
     @Test
     @DisplayName("Deve lançar exceção ao tentar criar matéria com nome já existente")
     public void deveRetornarExcecaoQuandoCriarMateriaComNomeExistente() {
         MateriaRequestDTO request = new MateriaRequestDTO("Matemática");
-        when(materiaDAO.existsByNome(request.nome()))
+        when(materiaRepository.existsByNome(request.nome()))
                 .thenReturn(true);
 
         assertThrows(MateriaExistenteException.class, () -> {

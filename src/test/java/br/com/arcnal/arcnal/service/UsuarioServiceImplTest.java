@@ -1,7 +1,7 @@
 package br.com.arcnal.arcnal.service;
 
 
-import br.com.arcnal.arcnal.dao.UsuarioDAO;
+import br.com.arcnal.arcnal.dao.UsuarioRepository;
 import br.com.arcnal.arcnal.domain.Usuario;
 import br.com.arcnal.arcnal.domain.enums.Cargo;
 import br.com.arcnal.arcnal.dto.UsuarioRequestDTO;
@@ -31,7 +31,7 @@ class UsuarioServiceImplTest {
     private UsuarioServiceImpl usuarioService;
 
     @Mock
-    private UsuarioDAO usuarioDAO;
+    private UsuarioRepository usuarioRepository;
 
     @Mock
     private UsuarioMapper usuarioMapper;
@@ -54,7 +54,7 @@ class UsuarioServiceImplTest {
     @Test
     @DisplayName("Deve retornar EmailEmUsoException quando cadastrar usuário com email já existente")
     public void deveRetornarEmailEmUsoExceptionQuandoCadastrarUsuarioComEmailJaExistente() {
-        when(usuarioDAO.existsByEmail(dto.email()))
+        when(usuarioRepository.existsByEmail(dto.email()))
                 .thenReturn(true);
         assertThrows(EmailEmUsoException.class, () -> {
             usuarioService.cadastrarUsuario(dto, "0:0:0:0:0:0:0:1");
@@ -68,7 +68,7 @@ class UsuarioServiceImplTest {
         List<Usuario> usuarios = Collections.singletonList(new Usuario());
         List<UsuarioResponseDTO> usuarioResponse = Collections.singletonList(usuarioResponseDTO);
 
-        when(usuarioDAO.findAll())
+        when(usuarioRepository.findAll())
                 .thenReturn(usuarios);
         when(usuarioMapper.toResponse(usuarios))
                 .thenReturn(usuarioResponse);

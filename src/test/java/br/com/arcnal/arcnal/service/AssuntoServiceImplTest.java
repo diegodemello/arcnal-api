@@ -1,6 +1,6 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.dao.MateriaDAO;
+import br.com.arcnal.arcnal.dao.MateriaRepository;
 import br.com.arcnal.arcnal.dto.AssuntoRequestDTO;
 import br.com.arcnal.arcnal.exception.MateriaNaoEncontradaException;
 import org.junit.jupiter.api.DisplayName;
@@ -22,13 +22,13 @@ class AssuntoServiceImplTest {
     AssuntoServiceImpl assuntoService;
 
     @Mock
-    MateriaDAO materiaDAO;
+    MateriaRepository materiaRepository;
 
     @Test
     @DisplayName("Deve lançar MateriaNaoEncontradaException quando a matéria não existir")
     public void deveRetornarMateriaNaoEncontradaExceptionQuandoMateriaNaoExistir() {
         AssuntoRequestDTO request = new AssuntoRequestDTO("Assunto Teste", 10);
-        when(materiaDAO.findById(request.idMateria()))
+        when(materiaRepository.findById(request.idMateria()))
                 .thenReturn(Optional.empty());
         assertThrows(MateriaNaoEncontradaException.class, () -> {
             assuntoService.criarNovoAssunto(request);

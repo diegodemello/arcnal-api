@@ -13,10 +13,8 @@ import br.com.arcnal.arcnal.exception.*;
 import br.com.arcnal.arcnal.mapper.QuestaoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -27,10 +25,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuestaoServiceImpl implements IQuestaoService{
 
-    private final QuestaoDAO questaoDAO;
-    private final BancaDAO bancaDAO;
-    private final MateriaDAO materiaDAO;
-    private final AssuntoDAO assuntoDAO;
+    private final QuestaoRepository questaoRepository;
+    private final BancaRepository bancaRepository;
+    private final MateriaRepository materiaRepository;
+    private final AssuntoRepository assuntoRepository;
     private final QuestaoMapper questaoMapper;
 
     Integer ANO_ATUAL = Calendar.getInstance().get(Calendar.YEAR);
@@ -49,7 +47,7 @@ public class QuestaoServiceImpl implements IQuestaoService{
         questao.setBanca(banca);
         questao.setMateria(materia);
         questao.setAssunto(assunto);
-        questaoDAO.save(questao);
+        questaoRepository.save(questao);
         log.info("Questão criada com id = " + questao.getId());
 
         QuestaoResponseDTO questaoResponseDTO = questaoMapper.toResponse(questao);
@@ -58,7 +56,7 @@ public class QuestaoServiceImpl implements IQuestaoService{
 
     @Override
     public List<QuestaoResponseDTO> listarQuestoes(Integer pagina, Integer objetos) {
-        return questaoMapper.toResponses(questaoDAO.findAll(PageRequest.of(pagina, objetos)).getContent());
+        return questaoMapper.toResponses(questaoRepository.findAll(PageRequest.of(pagina, objetos)).getContent());
     }
 
     @Override
@@ -69,7 +67,7 @@ public class QuestaoServiceImpl implements IQuestaoService{
 
         Pageable pageable = PageRequest.of(pagina, objetos);
 
-        List<Questao> questoes = questaoDAO.findAll(QuestaoSpec.porFiltros(idBanca, ano, idMateria, idAssunto), pageable).getContent();
+        List<Questao> questoes = questaoRepository.findAll(QuestaoSpec.porFiltros(idBanca, ano, idMateria, idAssunto), pageable).getContent();
 
         return questaoMapper.toResponses(questoes);
     }
@@ -93,7 +91,7 @@ public class QuestaoServiceImpl implements IQuestaoService{
     }
 
     private void validarEnunciadoRepetido(String enunciado){
-        if(questaoDAO.existsByEnunciado(enunciado)){
+        if(questaoRepository.existsByEnunciado(enunciado)){
             throw new EnunciadoExistenteException("Enunciado já existente no sistema.");
         }
     }
@@ -115,22 +113,22 @@ public class QuestaoServiceImpl implements IQuestaoService{
     }
 
     private Banca buscarBancaPorId(Integer id){
-        return  bancaDAO.findById(id)
+        return  bancaRepository.findById(id)
                 .orElseThrow(() -> new BancaExistenteException("ID de banca enviado não existe."));
     }
 
     private Materia buscarMateriaPorId(Integer id){
-        return materiaDAO.findById(id)
+        return materiaRepository.findById(id)
                 .orElseThrow(() -> new MateriaNaoEncontradaException("ID de matéria enviado não existe."));
     }
 
     private Assunto buscarAssuntoPorId(Integer id){
-        return assuntoDAO.findById(id)
+        return assuntoRepository.findById(id)
                 .orElseThrow(() -> new AssuntoNaoEncontradoException("ID de assunto enviado não existe."));
     }
 
     private Questao buscarQuestaoPorId(Integer id){
-        return questaoDAO.findById(id)
+        return questaoRepository.findById(id)
                 .orElseThrow(() -> new QuestaoNaoEncontradaException("ID de questão enviado não existe."));
     }
 

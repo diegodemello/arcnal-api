@@ -1,8 +1,8 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.dao.QuestaoDAO;
-import br.com.arcnal.arcnal.dao.RevisaoDAO;
-import br.com.arcnal.arcnal.dao.UsuarioDAO;
+import br.com.arcnal.arcnal.dao.QuestaoRepository;
+import br.com.arcnal.arcnal.dao.RevisaoRepository;
+import br.com.arcnal.arcnal.dao.UsuarioRepository;
 import br.com.arcnal.arcnal.dto.RevisaoRequestDTO;
 import br.com.arcnal.arcnal.dto.RevisaoResponseDTO;
 import br.com.arcnal.arcnal.domain.Questao;
@@ -23,10 +23,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RevisaoServiceImpl implements IRevisaoService {
 
-    private final RevisaoDAO revisaoDAO;
+    private final RevisaoRepository revisaoRepository;
     private final RevisaoMapper revisaoMapper;
-    private final UsuarioDAO usuarioDAO;
-    private final QuestaoDAO questaoDAO;
+    private final UsuarioRepository usuarioRepository;
+    private final QuestaoRepository questaoRepository;
 
     @Override
     public void criarRevisao(RevisaoRequestDTO dto, String email) {
@@ -38,7 +38,7 @@ public class RevisaoServiceImpl implements IRevisaoService {
         revisao.setUsuario(usuario);
         revisao.setQuestoes(questoes);
 
-        revisaoDAO.save(revisao);
+        revisaoRepository.save(revisao);
     }
 
     @Override
@@ -52,21 +52,21 @@ public class RevisaoServiceImpl implements IRevisaoService {
     }
 
     private Usuario buscarUsuarioPorEmail(String email){
-        return usuarioDAO.findAllByEmail(email)
+        return usuarioRepository.findAllByEmail(email)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado com o Email: " + email));
     }
 
     private Usuario buscarUsuarioPorId(UUID id){
-        return usuarioDAO.findById(id)
+        return usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado com o ID: " + id));
     }
 
     private List<Revisao> buscarRevisoesPorUsuario(UUID id){
-        return revisaoDAO.findAllByUsuarioId(id);
+        return revisaoRepository.findAllByUsuarioId(id);
     }
 
     private List<Questao> buscarEValidarQuestoes(List<Integer> idQuestoes) {
-        List<Questao> questoes = questaoDAO.findAllById(idQuestoes);
+        List<Questao> questoes = questaoRepository.findAllById(idQuestoes);
         if(questoes.size() != idQuestoes.size()) {
             throw new QuestaoNaoEncontradaException("Uma ou mais questões não foram encontradas.");
         }

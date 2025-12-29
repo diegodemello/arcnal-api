@@ -1,8 +1,8 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.dao.QuestaoDAO;
-import br.com.arcnal.arcnal.dao.RevisaoDAO;
-import br.com.arcnal.arcnal.dao.UsuarioDAO;
+import br.com.arcnal.arcnal.dao.QuestaoRepository;
+import br.com.arcnal.arcnal.dao.RevisaoRepository;
+import br.com.arcnal.arcnal.dao.UsuarioRepository;
 import br.com.arcnal.arcnal.domain.Usuario;
 import br.com.arcnal.arcnal.dto.RevisaoRequestDTO;
 import br.com.arcnal.arcnal.exception.QuestaoNaoEncontradaException;
@@ -26,11 +26,11 @@ class RevisaoServiceImplTest {
     RevisaoServiceImpl revisaoService;
 
     @Mock
-    UsuarioDAO usuarioDAO;
+    UsuarioRepository usuarioRepository;
     @Mock
-    QuestaoDAO questaoDAO;
+    QuestaoRepository questaoRepository;
     @Mock
-    RevisaoDAO revisaoDAO;
+    RevisaoRepository revisaoRepository;
 
     RevisaoRequestDTO request;
     String idUsuario= "e486086c-0b6b-47df-9d69-2ae1f3097563";
@@ -48,7 +48,7 @@ class RevisaoServiceImplTest {
     @Test
     @DisplayName("Deve lançar exceção quando usuário inexistente for consultado")
     public void deveRetornarUsuarioNaoEncontradoExceptionQuandoUsuarioInexistente() {
-        Mockito.when(usuarioDAO.findAllByEmail(emailUsuario))
+        Mockito.when(usuarioRepository.findAllByEmail(emailUsuario))
                 .thenReturn(Optional.empty());
         Assertions.assertThrows(UsuarioNaoEncontradoException.class, () -> {
            revisaoService.criarRevisao(request, emailUsuario);
@@ -58,9 +58,9 @@ class RevisaoServiceImplTest {
     @Test
     @DisplayName("Deve lançar exceção quando questão inexistente for consultada")
     public void deveRetornarQuestaoNaoEncontradaExceptionQuandoQuestaoInexistente() {
-        Mockito.when(usuarioDAO.findAllByEmail(emailUsuario))
+        Mockito.when(usuarioRepository.findAllByEmail(emailUsuario))
                 .thenReturn(Optional.of(new Usuario()));
-        Mockito.when(questaoDAO.findAllById(request.idQuestoes()))
+        Mockito.when(questaoRepository.findAllById(request.idQuestoes()))
                 .thenReturn(Collections.emptyList());
         Assertions.assertThrows(QuestaoNaoEncontradaException.class, () -> {
            revisaoService.criarRevisao(request, emailUsuario);
@@ -70,7 +70,7 @@ class RevisaoServiceImplTest {
     @Test
     @DisplayName("Deve lançar exceção quando usuário inexistente for consultado")
     public void deveRetornarUsuarioNaoEncontradoExceptionQuandoUsuarioInexistenteNoListar() {
-        Mockito.when(usuarioDAO.findById(UUID.fromString(idUsuario)))
+        Mockito.when(usuarioRepository.findById(UUID.fromString(idUsuario)))
                         .thenReturn(Optional.empty());
         Assertions.assertThrows(UsuarioNaoEncontradoException.class, () -> {
             revisaoService.listarRevisoesPorUsuario(UUID.fromString(idUsuario));
@@ -80,9 +80,9 @@ class RevisaoServiceImplTest {
     @Test
     @DisplayName("Deve lançar exceção quando não houver revisões para o usuário")
     public void deveRetornarRevisoesExistentesExceptionQuandoNaoHouverRevisoes() {
-        Mockito.when(usuarioDAO.findById(UUID.fromString(idUsuario)))
+        Mockito.when(usuarioRepository.findById(UUID.fromString(idUsuario)))
                 .thenReturn(Optional.of(new Usuario()));
-        Mockito.when(revisaoDAO.findAllByUsuarioId(UUID.fromString(idUsuario)))
+        Mockito.when(revisaoRepository.findAllByUsuarioId(UUID.fromString(idUsuario)))
                 .thenReturn(Collections.emptyList());
         Assertions.assertThrows(RevisoesExistentesException.class, () -> {
            revisaoService.listarRevisoesPorUsuario(UUID.fromString(idUsuario));

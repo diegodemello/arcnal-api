@@ -1,7 +1,6 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.dao.AssuntoDAO;
-import br.com.arcnal.arcnal.dao.MateriaDAO;
+import br.com.arcnal.arcnal.dao.MateriaRepository;
 import br.com.arcnal.arcnal.dto.MateriaRequestDTO;
 import br.com.arcnal.arcnal.domain.Materia;
 import br.com.arcnal.arcnal.exception.MateriaExistenteException;
@@ -16,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MateriaServiceImpl implements IMateriaService{
 
-    private final MateriaDAO dao;
+    private final MateriaRepository dao;
     private final MateriaMapper materiaMapper;
 
     @Override
