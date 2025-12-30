@@ -91,7 +91,7 @@ public class QuestaoServiceImpl implements IQuestaoService{
     }
 
     private void validarEnunciadoRepetido(String enunciado){
-        if(questaoRepository.existsByEnunciado(enunciado)){
+        if(questaoRepository.existsByMetadadosEnunciado(enunciado)){
             throw new EnunciadoExistenteException("Enunciado já existente no sistema.");
         }
     }
