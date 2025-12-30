@@ -1,7 +1,7 @@
 package br.com.arcnal.arcnal.presentation.controller;
 
-import br.com.arcnal.arcnal.application.dto.RevisaoRequestDTO;
-import br.com.arcnal.arcnal.application.dto.RevisaoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.RevisaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.RevisaoResponseDTO;
 import br.com.arcnal.arcnal.application.service.IRevisaoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

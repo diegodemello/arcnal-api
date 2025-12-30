@@ -1,7 +1,7 @@
 package br.com.arcnal.arcnal.application.mapper;
 
-import br.com.arcnal.arcnal.application.dto.UsuarioRequestDTO;
-import br.com.arcnal.arcnal.application.dto.UsuarioResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.UsuarioRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.UsuarioResponseDTO;
 import br.com.arcnal.arcnal.domain.entities.Usuario;
 import br.com.arcnal.arcnal.domain.valueobjects.Email;
 import br.com.arcnal.arcnal.domain.valueobjects.NomeUsuario;

@@ -1,4 +1,4 @@
-package br.com.arcnal.arcnal.application.service;
+package br.com.arcnal.arcnal.application.service.impl;
 
 import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package br.com.arcnal.arcnal.application.mapper;
 
-import br.com.arcnal.arcnal.application.dto.RevisaoRequestDTO;
-import br.com.arcnal.arcnal.application.dto.RevisaoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.RevisaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.RevisaoResponseDTO;
 import br.com.arcnal.arcnal.domain.entities.Revisao;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,10 +1,11 @@
-package br.com.arcnal.arcnal.application.service;
+package br.com.arcnal.arcnal.application.service.impl;
 
+import br.com.arcnal.arcnal.application.service.IRevisaoService;
 import br.com.arcnal.arcnal.domain.repositories.QuestaoRepository;
 import br.com.arcnal.arcnal.domain.repositories.RevisaoRepository;
 import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
-import br.com.arcnal.arcnal.application.dto.RevisaoRequestDTO;
-import br.com.arcnal.arcnal.application.dto.RevisaoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.RevisaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.RevisaoResponseDTO;
 import br.com.arcnal.arcnal.domain.entities.Questao;
 import br.com.arcnal.arcnal.domain.entities.Revisao;
 import br.com.arcnal.arcnal.domain.entities.Usuario;

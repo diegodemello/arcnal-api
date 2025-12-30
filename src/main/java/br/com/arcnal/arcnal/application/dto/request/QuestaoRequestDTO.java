@@ -1,4 +1,4 @@
-package br.com.arcnal.arcnal.application.dto;
+package br.com.arcnal.arcnal.application.dto.request;
 
 import br.com.arcnal.arcnal.domain.enums.Nivel;
 import jakarta.validation.constraints.NotBlank;

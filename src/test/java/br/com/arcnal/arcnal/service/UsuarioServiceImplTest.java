@@ -1,12 +1,12 @@
 package br.com.arcnal.arcnal.service;
 
 
-import br.com.arcnal.arcnal.application.service.UsuarioServiceImpl;
+import br.com.arcnal.arcnal.application.service.impl.UsuarioServiceImpl;
 import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
 import br.com.arcnal.arcnal.domain.entities.Usuario;
 import br.com.arcnal.arcnal.domain.enums.Cargo;
-import br.com.arcnal.arcnal.application.dto.UsuarioRequestDTO;
-import br.com.arcnal.arcnal.application.dto.UsuarioResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.UsuarioRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.UsuarioResponseDTO;
 import br.com.arcnal.arcnal.domain.exception.EmailEmUsoException;
 import br.com.arcnal.arcnal.application.mapper.UsuarioMapper;
 import org.junit.jupiter.api.BeforeEach;

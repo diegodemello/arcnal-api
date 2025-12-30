@@ -1,11 +1,11 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.application.service.RevisaoServiceImpl;
+import br.com.arcnal.arcnal.application.service.impl.RevisaoServiceImpl;
 import br.com.arcnal.arcnal.domain.repositories.QuestaoRepository;
 import br.com.arcnal.arcnal.domain.repositories.RevisaoRepository;
 import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
 import br.com.arcnal.arcnal.domain.entities.Usuario;
-import br.com.arcnal.arcnal.application.dto.RevisaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.request.RevisaoRequestDTO;
 import br.com.arcnal.arcnal.domain.exception.QuestaoNaoEncontradaException;
 import br.com.arcnal.arcnal.domain.exception.RevisoesExistentesException;
 import br.com.arcnal.arcnal.domain.exception.UsuarioNaoEncontradoException;

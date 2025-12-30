@@ -1,15 +1,16 @@
-package br.com.arcnal.arcnal.application.service;
+package br.com.arcnal.arcnal.application.service.impl;
 
+import br.com.arcnal.arcnal.application.service.IQuestaoService;
 import br.com.arcnal.arcnal.domain.exception.*;
 import br.com.arcnal.arcnal.domain.repositories.*;
-import br.com.arcnal.arcnal.application.dto.QuestaoRequestDTO;
-import br.com.arcnal.arcnal.application.dto.QuestaoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.QuestaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.QuestaoResponseDTO;
 import br.com.arcnal.arcnal.domain.entities.Assunto;
 import br.com.arcnal.arcnal.domain.entities.Banca;
 import br.com.arcnal.arcnal.domain.entities.Materia;
 import br.com.arcnal.arcnal.domain.entities.Questao;
-import br.com.arcnal.arcnal.application.dto.ResolucaoQuestaoResponseDTO;
-import br.com.arcnal.arcnal.application.dto.RespostaQuestaoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.response.ResolucaoQuestaoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.response.RespostaQuestaoResponseDTO;
 import br.com.arcnal.arcnal.application.mapper.QuestaoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class QuestaoServiceImpl implements IQuestaoService{
+public class QuestaoServiceImpl implements IQuestaoService {
 
     private final QuestaoRepository questaoRepository;
     private final BancaRepository bancaRepository;

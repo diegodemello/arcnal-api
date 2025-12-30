@@ -1,4 +1,4 @@
-package br.com.arcnal.arcnal.application.dto;
+package br.com.arcnal.arcnal.application.dto.response;
 
 import br.com.arcnal.arcnal.domain.enums.Nivel;
 import lombok.Builder;

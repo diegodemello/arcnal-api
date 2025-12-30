@@ -1,10 +1,10 @@
 package br.com.arcnal.arcnal.presentation.controller;
 
 import br.com.arcnal.arcnal.domain.entities.Usuario;
-import br.com.arcnal.arcnal.application.dto.AutenticacaoRequestDTO;
-import br.com.arcnal.arcnal.application.dto.LoginResponseDTO;
-import br.com.arcnal.arcnal.application.dto.UsuarioRequestDTO;
-import br.com.arcnal.arcnal.application.dto.UsuarioResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.AutenticacaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.LoginResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.UsuarioRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.UsuarioResponseDTO;
 import br.com.arcnal.arcnal.infra.security.TokenService;
 import br.com.arcnal.arcnal.application.service.IUsuarioService;
 import jakarta.validation.Valid;

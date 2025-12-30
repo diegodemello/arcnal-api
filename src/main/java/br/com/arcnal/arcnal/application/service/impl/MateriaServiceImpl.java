@@ -1,7 +1,8 @@
-package br.com.arcnal.arcnal.application.service;
+package br.com.arcnal.arcnal.application.service.impl;
 
+import br.com.arcnal.arcnal.application.service.IMateriaService;
 import br.com.arcnal.arcnal.domain.repositories.MateriaRepository;
-import br.com.arcnal.arcnal.application.dto.MateriaRequestDTO;
+import br.com.arcnal.arcnal.application.dto.request.MateriaRequestDTO;
 import br.com.arcnal.arcnal.domain.entities.Materia;
 import br.com.arcnal.arcnal.domain.exception.MateriaExistenteException;
 import br.com.arcnal.arcnal.application.mapper.MateriaMapper;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class MateriaServiceImpl implements IMateriaService{
+public class MateriaServiceImpl implements IMateriaService {
 
     private final MateriaRepository dao;
     private final MateriaMapper materiaMapper;

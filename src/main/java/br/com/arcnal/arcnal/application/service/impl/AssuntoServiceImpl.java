@@ -1,10 +1,11 @@
-package br.com.arcnal.arcnal.application.service;
+package br.com.arcnal.arcnal.application.service.impl;
 
+import br.com.arcnal.arcnal.application.service.IAssuntoService;
 import br.com.arcnal.arcnal.domain.repositories.AssuntoRepository;
 import br.com.arcnal.arcnal.domain.repositories.MateriaRepository;
-import br.com.arcnal.arcnal.application.dto.AssuntoRequestDTO;
-import br.com.arcnal.arcnal.application.dto.AssuntoResponseDTO;
-import br.com.arcnal.arcnal.application.dto.AssuntosMateriaResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.AssuntoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.AssuntoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.response.AssuntosMateriaResponseDTO;
 import br.com.arcnal.arcnal.domain.entities.Assunto;
 import br.com.arcnal.arcnal.domain.entities.Materia;
 import br.com.arcnal.arcnal.domain.exception.MateriaNaoEncontradaException;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AssuntoServiceImpl implements IAssuntoService{
+public class AssuntoServiceImpl implements IAssuntoService {
 
     private final AssuntoRepository assuntoRepository;
     private final MateriaRepository materiaRepository;

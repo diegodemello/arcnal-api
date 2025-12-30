@@ -1,6 +1,6 @@
 package br.com.arcnal.arcnal.presentation.controller;
 
-import br.com.arcnal.arcnal.application.dto.BancaRequestDTO;
+import br.com.arcnal.arcnal.application.dto.request.BancaRequestDTO;
 import br.com.arcnal.arcnal.domain.entities.Banca;
 import br.com.arcnal.arcnal.application.service.IBancaService;
 import jakarta.validation.Valid;

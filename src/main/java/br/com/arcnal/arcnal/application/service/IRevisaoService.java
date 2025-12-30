@@ -1,7 +1,7 @@
 package br.com.arcnal.arcnal.application.service;
 
-import br.com.arcnal.arcnal.application.dto.RevisaoRequestDTO;
-import br.com.arcnal.arcnal.application.dto.RevisaoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.RevisaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.RevisaoResponseDTO;
 
 import java.util.List;
 import java.util.UUID;

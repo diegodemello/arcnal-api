@@ -1,8 +1,9 @@
-package br.com.arcnal.arcnal.application.service;
+package br.com.arcnal.arcnal.application.service.impl;
 
+import br.com.arcnal.arcnal.application.service.IUsuarioService;
 import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
-import br.com.arcnal.arcnal.application.dto.UsuarioRequestDTO;
-import br.com.arcnal.arcnal.application.dto.UsuarioResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.UsuarioRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.UsuarioResponseDTO;
 import br.com.arcnal.arcnal.domain.entities.Usuario;
 import br.com.arcnal.arcnal.domain.enums.Cargo;
 import br.com.arcnal.arcnal.domain.exception.EmailEmUsoException;

@@ -1,4 +1,4 @@
-package br.com.arcnal.arcnal.application.dto;
+package br.com.arcnal.arcnal.application.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

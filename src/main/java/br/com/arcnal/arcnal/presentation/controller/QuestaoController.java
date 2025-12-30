@@ -1,6 +1,10 @@
 package br.com.arcnal.arcnal.presentation.controller;
 
-import br.com.arcnal.arcnal.application.dto.*;
+import br.com.arcnal.arcnal.application.dto.request.QuestaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.request.RespostaQuestaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.QuestaoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.response.ResolucaoQuestaoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.response.RespostaQuestaoResponseDTO;
 import br.com.arcnal.arcnal.application.service.IQuestaoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

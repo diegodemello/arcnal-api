@@ -1,9 +1,9 @@
 package br.com.arcnal.arcnal.application.mapper;
 
-import br.com.arcnal.arcnal.application.dto.QuestaoRequestDTO;
-import br.com.arcnal.arcnal.application.dto.QuestaoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.QuestaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.QuestaoResponseDTO;
 import br.com.arcnal.arcnal.domain.entities.Questao;
-import br.com.arcnal.arcnal.application.dto.ResolucaoQuestaoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.response.ResolucaoQuestaoResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
