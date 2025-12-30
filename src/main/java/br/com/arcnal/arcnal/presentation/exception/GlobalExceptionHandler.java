@@ -102,6 +102,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
     }
 
+    @ExceptionHandler(SenhaInvalidaException.class)
+    public ResponseEntity<ExceptionResponse> handleSenhaInvalida(SenhaInvalidaException ex){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), Instant.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(EmailInvalidoException.class)
+    public ResponseEntity<ExceptionResponse> handleEmailInvalido(EmailInvalidoException ex){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), Instant.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+    }
+
     @ExceptionHandler(NomeInvalidoException.class)
     public ResponseEntity<ExceptionResponse> handleAnoInvalido(NomeInvalidoException ex){
         ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), Instant.now());

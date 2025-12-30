@@ -55,10 +55,10 @@ class UsuarioServiceImplTest {
     @Test
     @DisplayName("Deve retornar EmailEmUsoException quando cadastrar usuário com email já existente")
     public void deveRetornarEmailEmUsoExceptionQuandoCadastrarUsuarioComEmailJaExistente() {
-        when(usuarioRepository.existsByEmail(dto.email()))
+        when(usuarioRepository.existsByEmailEndereco(dto.email()))
                 .thenReturn(true);
         assertThrows(EmailEmUsoException.class, () -> {
-            usuarioService.cadastrarUsuario(dto, "0:0:0:0:0:0:0:1");
+            usuarioService.cadastrarUsuario(dto);
         });
     }
 

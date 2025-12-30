@@ -2,7 +2,9 @@ package br.com.arcnal.arcnal.application.mapper;
 
 import br.com.arcnal.arcnal.application.dto.MateriaRequestDTO;
 import br.com.arcnal.arcnal.domain.entities.Materia;
+import br.com.arcnal.arcnal.domain.valueobjects.Email;
 import br.com.arcnal.arcnal.domain.valueobjects.Nome;
+import br.com.arcnal.arcnal.domain.valueobjects.Senha;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

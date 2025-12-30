@@ -28,8 +28,8 @@ public class UsuarioController {
     private TokenService tokenService;
 
     @PostMapping("/cadastrar")
-    public ResponseEntity cadastrarUsuario(@Valid @RequestBody UsuarioRequestDTO dto, String enderecoIp) {
-        usuarioService.cadastrarUsuario(dto, enderecoIp);
+    public ResponseEntity cadastrarUsuario(@Valid @RequestBody UsuarioRequestDTO dto) {
+        usuarioService.cadastrarUsuario(dto);
         return ResponseEntity.ok().build();
     }
 

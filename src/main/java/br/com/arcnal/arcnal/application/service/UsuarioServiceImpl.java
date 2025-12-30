@@ -24,10 +24,9 @@ public class UsuarioServiceImpl implements IUsuarioService {
     private final UsuarioMapper usuarioMapper;
 
     @Override
-    public void cadastrarUsuario(UsuarioRequestDTO dto, String enderecoIp) {
+    public void cadastrarUsuario(UsuarioRequestDTO dto) {
         validarEmailUnico(dto.email());
         Usuario usuario = usuarioMapper.toEntity(dto);
-        usuario.setEnderecoIp(enderecoIp);
         usuario.setCargo(Cargo.USUARIO);
         String senhaCriptografada = new BCryptPasswordEncoder().encode(dto.senha());
         usuario.setSenha(senhaCriptografada);

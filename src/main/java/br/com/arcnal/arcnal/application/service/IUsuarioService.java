@@ -6,6 +6,6 @@ import br.com.arcnal.arcnal.application.dto.UsuarioResponseDTO;
 import java.util.List;
 
 public interface IUsuarioService {
-    void cadastrarUsuario(UsuarioRequestDTO dto, String enderecoIp);
+    void cadastrarUsuario(UsuarioRequestDTO dto);
     List<UsuarioResponseDTO> listarUsuarios(Integer pagina, Integer objetos);
 }
