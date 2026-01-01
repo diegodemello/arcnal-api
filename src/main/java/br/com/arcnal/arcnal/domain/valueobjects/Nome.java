@@ -25,7 +25,7 @@ public class Nome {
     }
 
     private void validarCaracteresEspeciais(String nome){
-        if(nome.matches(".*[^a-zA-Z0-9\\s].*")){
+        if(nome.matches(".*[^\\p{L}\\s].*")){
             throw new NomeInvalidoException("O nome não deve conter caracteres especiais.");
         }
     }

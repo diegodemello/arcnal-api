@@ -21,14 +21,18 @@ public class MateriaServiceImpl implements IMateriaService {
 
     @Override
     public Materia criarMateriaSemAssuntos(MateriaRequestDTO dto) {
-        if(dao.existsByNome(dto.nome())){
-            throw new MateriaExistenteException("Matéria com o nome " + dto.nome() + " já existe.");
-        }
+        validarSeJaExisteMateriaComMesmoNome(dto.nome());
         return dao.save(materiaMapper.toEntity(dto));
     }
 
     @Override
     public List<Materia> listarTodasMaterias() {
         return dao.findAll();
+    }
+
+    private void validarSeJaExisteMateriaComMesmoNome(String nome){
+        if(dao.existsByNome(nome)){
+            throw new MateriaExistenteException("Matéria com o nome " + nome + " já existe.");
+        }
     }
 }

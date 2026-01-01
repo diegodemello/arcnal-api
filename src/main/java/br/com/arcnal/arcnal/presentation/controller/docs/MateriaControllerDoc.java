@@ -21,6 +21,7 @@ public interface MateriaControllerDoc {
             @ApiResponse (responseCode = "400", description = "Erro no preenchimento do nome (numero minimo de caracteres ou uso de caracteres especiais)."),
             @ApiResponse (responseCode = "401", description = "Usuário não autenticado."),
             @ApiResponse (responseCode = "403", description = "Usuário não autorizado para essa rota."),
+            @ApiResponse (responseCode = "409", description = "Matéria com o mesmo nome já cadastrada.")
     })
     ResponseEntity<Materia> criarMateria(MateriaRequestDTO dto);
 
