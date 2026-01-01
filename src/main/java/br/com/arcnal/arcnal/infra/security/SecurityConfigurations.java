@@ -54,6 +54,9 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/banca").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuario/cadastrar", "/usuario/login").permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/v3/api-docs/**",
+                                "/swagger-ui/**").permitAll()
+
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(customAuthEntryPoint))

@@ -3,6 +3,7 @@ package br.com.arcnal.arcnal.presentation.controller;
 import br.com.arcnal.arcnal.application.dto.request.RevisaoRequestDTO;
 import br.com.arcnal.arcnal.application.dto.response.RevisaoResponseDTO;
 import br.com.arcnal.arcnal.application.service.IRevisaoService;
+import br.com.arcnal.arcnal.presentation.controller.docs.RevisaoControllerDoc;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/revisao")
-public class RevisaoController {
+public class RevisaoController implements RevisaoControllerDoc {
     @Autowired
     IRevisaoService revisaoService;
 
+    @Override
     @PostMapping
     public ResponseEntity<Void> criarRevisao(@Valid @RequestBody RevisaoRequestDTO dto,
                                              @AuthenticationPrincipal UserDetails userDetails){
@@ -27,6 +29,7 @@ public class RevisaoController {
         return ResponseEntity.ok().build();
     }
 
+    @Override
     @GetMapping("/listar/{idUsuario}")
     public ResponseEntity<List<RevisaoResponseDTO>> listarRevisoesPorUsuario(@PathVariable UUID idUsuario){
         return ResponseEntity.ok().body(revisaoService.listarRevisoesPorUsuario(idUsuario));
