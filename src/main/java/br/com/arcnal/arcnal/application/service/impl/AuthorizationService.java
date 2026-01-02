@@ -1,6 +1,5 @@
 package br.com.arcnal.arcnal.application.service.impl;
 
-import br.com.arcnal.arcnal.domain.exception.CredenciaisInvalidasException;
 import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;

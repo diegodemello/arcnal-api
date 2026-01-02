@@ -49,11 +49,11 @@ public class RevisaoServiceImpl implements IRevisaoService {
 
         validarRevisoesEncontradas(revisoes);
 
-        return revisaoMapper.toResponse(revisoes);
+        return revisaoMapper.toResponses(revisoes);
     }
 
     private Usuario buscarUsuarioPorEmail(String email){
-        return usuarioRepository.findAllByEmail(email)
+        return usuarioRepository.findAllByEmailEndereco(email)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado com o Email: " + email));
     }
 

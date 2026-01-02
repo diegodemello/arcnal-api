@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class RevisaoController implements RevisaoControllerDoc {
     @PostMapping
     public ResponseEntity<Void> criarRevisao(@Valid @RequestBody RevisaoRequestDTO dto,
                                              @AuthenticationPrincipal UserDetails userDetails){
-        String emailUsuario = extrairEmailDoToken(userDetails);
+        String emailUsuario = extrairEmailDoToken();
         revisaoService.criarRevisao(dto, emailUsuario);
         return ResponseEntity.ok().build();
     }
@@ -35,7 +36,12 @@ public class RevisaoController implements RevisaoControllerDoc {
         return ResponseEntity.ok().body(revisaoService.listarRevisoesPorUsuario(idUsuario));
     }
 
-    private String extrairEmailDoToken(UserDetails userDetails){
-        return userDetails.getUsername();
+    private String extrairEmailDoToken(){
+        var autenticacao = SecurityContextHolder.getContext().getAuthentication();
+        if (autenticacao != null && autenticacao.getPrincipal() instanceof String){
+            return (String) autenticacao.getPrincipal();
+        } else {
+            throw new IllegalStateException("Não foi possível extrair o email do token.");
+        }
     }
 }
