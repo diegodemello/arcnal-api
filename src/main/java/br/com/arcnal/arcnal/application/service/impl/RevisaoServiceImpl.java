@@ -1,5 +1,6 @@
 package br.com.arcnal.arcnal.application.service.impl;
 
+import br.com.arcnal.arcnal.application.dto.response.DetalheRevisaoResponseDTO;
 import br.com.arcnal.arcnal.application.service.IRevisaoService;
 import br.com.arcnal.arcnal.domain.repositories.QuestaoRepository;
 import br.com.arcnal.arcnal.domain.repositories.RevisaoRepository;
@@ -14,6 +15,8 @@ import br.com.arcnal.arcnal.domain.exception.RevisoesExistentesException;
 import br.com.arcnal.arcnal.domain.exception.UsuarioNaoEncontradoException;
 import br.com.arcnal.arcnal.application.mapper.RevisaoMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,6 +53,20 @@ public class RevisaoServiceImpl implements IRevisaoService {
         validarRevisoesEncontradas(revisoes);
 
         return revisaoMapper.toResponses(revisoes);
+    }
+
+    @Override
+    public DetalheRevisaoResponseDTO listarRevisao(Integer pagina, Integer objetos, UUID idRevisao) {
+        Revisao revisao = revisaoRepository.findById(idRevisao)
+                .orElseThrow(() -> new RevisoesExistentesException("Revisão não encontrada com o ID: " + idRevisao));
+
+        Pageable pageable = PageRequest.of(pagina, objetos);
+        int inicio = (int) pageable.getOffset();
+        int fim = Math.min((inicio + pageable.getPageSize()), revisao.getQuestoes().size());
+
+        List<Questao> quesoesPaginadas = revisao.getQuestoes().subList(inicio, fim);
+
+        return revisaoMapper.toDetalheResponse(revisao, quesoesPaginadas);
     }
 
     private Usuario buscarUsuarioPorEmail(String email){

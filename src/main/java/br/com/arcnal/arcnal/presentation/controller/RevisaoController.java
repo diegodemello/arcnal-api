@@ -1,6 +1,7 @@
 package br.com.arcnal.arcnal.presentation.controller;
 
 import br.com.arcnal.arcnal.application.dto.request.RevisaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.DetalheRevisaoResponseDTO;
 import br.com.arcnal.arcnal.application.dto.response.RevisaoResponseDTO;
 import br.com.arcnal.arcnal.application.service.IRevisaoService;
 import br.com.arcnal.arcnal.presentation.controller.docs.RevisaoControllerDoc;
@@ -34,6 +35,14 @@ public class RevisaoController implements RevisaoControllerDoc {
     @GetMapping("/listar/{idUsuario}")
     public ResponseEntity<List<RevisaoResponseDTO>> listarRevisoesPorUsuario(@PathVariable UUID idUsuario){
         return ResponseEntity.ok().body(revisaoService.listarRevisoesPorUsuario(idUsuario));
+    }
+
+    @GetMapping("/{idRevisao}")
+    public ResponseEntity<DetalheRevisaoResponseDTO> listarRevisao(
+            @RequestParam Integer pagina,
+            @RequestParam Integer objetos,
+            @PathVariable UUID idRevisao){
+        return ResponseEntity.ok().body(revisaoService.listarRevisao(pagina, objetos, idRevisao));
     }
 
     private String extrairEmailDoToken(){
