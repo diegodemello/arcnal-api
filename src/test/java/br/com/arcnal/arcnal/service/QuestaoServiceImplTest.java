@@ -57,7 +57,7 @@ class QuestaoServiceImplTest {
     @Test
     @DisplayName("Deve retornar exceção quando enunciado for repetido")
     public void deveRetornarExcecaoQuandoEnunciadoForRepetido() {
-        when(questaoRepository.existsByEnunciado(request.enunciado()))
+        when(questaoRepository.existsByMetadadosEnunciado(request.enunciado()))
                 .thenReturn(true);
         assertThrows(EnunciadoExistenteException.class, () -> {
             questaoService.adicionarQuestao(request);
@@ -72,7 +72,7 @@ class QuestaoServiceImplTest {
                 "Madrid", "Paris", "Roma",
                 "Lisboa", 'A', "A capital da França é Paris.", "http://video.com/correcao");
 
-        when(questaoRepository.existsByEnunciado(request.enunciado()))
+        when(questaoRepository.existsByMetadadosEnunciado(request.enunciado()))
                 .thenReturn(false);
 
         assertThrows(AnoInvalidoException.class, () -> {

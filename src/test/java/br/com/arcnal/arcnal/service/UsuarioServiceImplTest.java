@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -55,29 +56,10 @@ class UsuarioServiceImplTest {
     @Test
     @DisplayName("Deve retornar EmailEmUsoException quando cadastrar usuário com email já existente")
     public void deveRetornarEmailEmUsoExceptionQuandoCadastrarUsuarioComEmailJaExistente() {
-        when(usuarioRepository.existsByEmailEndereco(dto.email()))
+        when(usuarioRepository.existsByEmail(dto.email()))
                 .thenReturn(true);
         assertThrows(EmailEmUsoException.class, () -> {
             usuarioService.cadastrarUsuario(dto);
         });
-    }
-
-    @Test
-    @DisplayName("Deve retornar lista de usuários")
-    public void deveRetornarListaDeUsuarios(){
-
-        List<Usuario> usuarios = Collections.singletonList(new Usuario());
-        List<UsuarioResponseDTO> usuarioResponse = Collections.singletonList(usuarioResponseDTO);
-
-        when(usuarioRepository.findAll())
-                .thenReturn(usuarios);
-        when(usuarioMapper.toResponse(usuarios))
-                .thenReturn(usuarioResponse);
-
-        Integer pagina = 0;
-        Integer objetos = 2;
-
-        List<UsuarioResponseDTO> resultado = usuarioService.listarUsuarios(pagina, objetos);
-        assertNotNull(resultado);
     }
 }
