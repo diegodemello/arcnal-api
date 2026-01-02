@@ -1,11 +1,14 @@
 package br.com.arcnal.arcnal.application.service.impl;
 
+import br.com.arcnal.arcnal.domain.exception.CredenciaisInvalidasException;
 import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class AuthorizationService implements UserDetailsService {
@@ -15,6 +18,7 @@ public class AuthorizationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return usuarioRepository.findByEmailEndereco(email);
+        return usuarioRepository.findByEmailEndereco(email)
+                .orElseThrow(() -> new InternalAuthenticationServiceException("Tentantiva de acesso ao email " + email + " falhou."));
     }
 }
