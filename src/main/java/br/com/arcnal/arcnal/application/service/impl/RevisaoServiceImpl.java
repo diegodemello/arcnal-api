@@ -1,5 +1,6 @@
 package br.com.arcnal.arcnal.application.service.impl;
 
+import br.com.arcnal.arcnal.application.dto.request.AdicionarQuestaoRevisaoRequestDTO;
 import br.com.arcnal.arcnal.application.dto.response.DetalheRevisaoResponseDTO;
 import br.com.arcnal.arcnal.application.service.IRevisaoService;
 import br.com.arcnal.arcnal.domain.repositories.QuestaoRepository;
@@ -14,6 +15,7 @@ import br.com.arcnal.arcnal.domain.exception.QuestaoNaoEncontradaException;
 import br.com.arcnal.arcnal.domain.exception.RevisoesExistentesException;
 import br.com.arcnal.arcnal.domain.exception.UsuarioNaoEncontradoException;
 import br.com.arcnal.arcnal.application.mapper.RevisaoMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +45,15 @@ public class RevisaoServiceImpl implements IRevisaoService {
         revisao.setQuestoes(questoes);
 
         revisaoRepository.save(revisao);
+    }
+
+    @Override
+    @Transactional
+    public void adicionarQuestao(UUID idRevisao, AdicionarQuestaoRevisaoRequestDTO dto) {
+        List<Questao> questoes = buscarEValidarQuestoes(dto.idQuestoes());
+        Revisao revisao = revisaoRepository.findById(idRevisao)
+                .orElseThrow(() -> new RevisoesExistentesException("Não existe uma revisão para esse ID."));
+        revisao.getQuestoes().addAll(questoes);
     }
 
     @Override

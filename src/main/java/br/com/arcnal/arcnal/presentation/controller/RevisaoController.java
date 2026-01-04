@@ -1,5 +1,6 @@
 package br.com.arcnal.arcnal.presentation.controller;
 
+import br.com.arcnal.arcnal.application.dto.request.AdicionarQuestaoRevisaoRequestDTO;
 import br.com.arcnal.arcnal.application.dto.request.RevisaoRequestDTO;
 import br.com.arcnal.arcnal.application.dto.response.DetalheRevisaoResponseDTO;
 import br.com.arcnal.arcnal.application.dto.response.RevisaoResponseDTO;
@@ -28,6 +29,12 @@ public class RevisaoController implements RevisaoControllerDoc {
                                              @AuthenticationPrincipal UserDetails userDetails){
         String emailUsuario = extrairEmailDoToken();
         revisaoService.criarRevisao(dto, emailUsuario);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{idRevisao}")
+    public ResponseEntity<Void> adicionarQuestoesParaUmaRevisao(@PathVariable UUID idRevisao, @RequestBody AdicionarQuestaoRevisaoRequestDTO dto){
+        revisaoService.adicionarQuestao(idRevisao, dto);
         return ResponseEntity.ok().build();
     }
 
