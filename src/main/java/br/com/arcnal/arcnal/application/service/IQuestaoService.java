@@ -1,9 +1,9 @@
 package br.com.arcnal.arcnal.application.service;
 
-import br.com.arcnal.arcnal.application.dto.QuestaoRequestDTO;
-import br.com.arcnal.arcnal.application.dto.QuestaoResponseDTO;
-import br.com.arcnal.arcnal.application.dto.ResolucaoQuestaoResponseDTO;
-import br.com.arcnal.arcnal.application.dto.RespostaQuestaoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.QuestaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.QuestaoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.response.ResolucaoQuestaoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.response.RespostaQuestaoResponseDTO;
 
 import java.util.List;
 

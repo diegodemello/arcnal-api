@@ -1,11 +1,11 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.application.service.RevisaoServiceImpl;
+import br.com.arcnal.arcnal.application.service.impl.RevisaoServiceImpl;
 import br.com.arcnal.arcnal.domain.repositories.QuestaoRepository;
 import br.com.arcnal.arcnal.domain.repositories.RevisaoRepository;
 import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
 import br.com.arcnal.arcnal.domain.entities.Usuario;
-import br.com.arcnal.arcnal.application.dto.RevisaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.request.RevisaoRequestDTO;
 import br.com.arcnal.arcnal.domain.exception.QuestaoNaoEncontradaException;
 import br.com.arcnal.arcnal.domain.exception.RevisoesExistentesException;
 import br.com.arcnal.arcnal.domain.exception.UsuarioNaoEncontradoException;
@@ -49,7 +49,7 @@ class RevisaoServiceImplTest {
     @Test
     @DisplayName("Deve lançar exceção quando usuário inexistente for consultado")
     public void deveRetornarUsuarioNaoEncontradoExceptionQuandoUsuarioInexistente() {
-        Mockito.when(usuarioRepository.findAllByEmail(emailUsuario))
+        Mockito.when(usuarioRepository.findAllByEmailEndereco(emailUsuario))
                 .thenReturn(Optional.empty());
         Assertions.assertThrows(UsuarioNaoEncontradoException.class, () -> {
            revisaoService.criarRevisao(request, emailUsuario);
@@ -59,7 +59,7 @@ class RevisaoServiceImplTest {
     @Test
     @DisplayName("Deve lançar exceção quando questão inexistente for consultada")
     public void deveRetornarQuestaoNaoEncontradaExceptionQuandoQuestaoInexistente() {
-        Mockito.when(usuarioRepository.findAllByEmail(emailUsuario))
+        Mockito.when(usuarioRepository.findAllByEmailEndereco(emailUsuario))
                 .thenReturn(Optional.of(new Usuario()));
         Mockito.when(questaoRepository.findAllById(request.idQuestoes()))
                 .thenReturn(Collections.emptyList());

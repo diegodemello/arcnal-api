@@ -1,6 +1,7 @@
 package br.com.arcnal.arcnal.infra.security;
 
 import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,20 +28,30 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var token = recuperarToken(request);
         if(token != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            var email = tokenService.validarToken(token);
-            var role = tokenService.getRole(token);
+            try {
+                var email = tokenService.validarToken(token);
+                var role = tokenService.getRole(token);
 
-            if(email != null  && role != null){
-                var autorizacoes = List.of(
-                        new SimpleGrantedAuthority("ROLE_" + role)
+                if(email != null  && role != null){
+                    var autorizacoes = List.of(
+                            new SimpleGrantedAuthority("ROLE_" + role)
+                    );
+                    var autenticacao =
+                            new UsernamePasswordAuthenticationToken(
+                                    email,
+                                    null,
+                                    autorizacoes
+                            );
+                    SecurityContextHolder.getContext().setAuthentication(autenticacao);
+                }
+            } catch (TokenExpiredException ex){
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write(
+                        "{\"codigo\":401,\"mensagem\":\"Token inválido ou expirado.\",\"datahora\":\"" +
+                                java.time.Instant.now() + "\"}"
                 );
-                var autenticacao =
-                        new UsernamePasswordAuthenticationToken(
-                                email,
-                                null,
-                                autorizacoes
-                        );
-                SecurityContextHolder.getContext().setAuthentication(autenticacao);
+                return;
             }
         }
         filterChain.doFilter(request, response);

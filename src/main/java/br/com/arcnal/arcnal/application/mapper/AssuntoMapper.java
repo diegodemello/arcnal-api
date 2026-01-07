@@ -1,7 +1,7 @@
 package br.com.arcnal.arcnal.application.mapper;
 
-import br.com.arcnal.arcnal.application.dto.AssuntoRequestDTO;
-import br.com.arcnal.arcnal.application.dto.AssuntoResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.AssuntoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.AssuntoResponseDTO;
 import br.com.arcnal.arcnal.domain.entities.Assunto;
 import br.com.arcnal.arcnal.domain.valueobjects.Nome;
 import org.mapstruct.Mapper;

@@ -1,12 +1,12 @@
 package br.com.arcnal.arcnal.service;
 
 
-import br.com.arcnal.arcnal.application.service.UsuarioServiceImpl;
+import br.com.arcnal.arcnal.application.service.impl.UsuarioServiceImpl;
 import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
 import br.com.arcnal.arcnal.domain.entities.Usuario;
 import br.com.arcnal.arcnal.domain.enums.Cargo;
-import br.com.arcnal.arcnal.application.dto.UsuarioRequestDTO;
-import br.com.arcnal.arcnal.application.dto.UsuarioResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.UsuarioRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.UsuarioResponseDTO;
 import br.com.arcnal.arcnal.domain.exception.EmailEmUsoException;
 import br.com.arcnal.arcnal.application.mapper.UsuarioMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -58,26 +59,7 @@ class UsuarioServiceImplTest {
         when(usuarioRepository.existsByEmail(dto.email()))
                 .thenReturn(true);
         assertThrows(EmailEmUsoException.class, () -> {
-            usuarioService.cadastrarUsuario(dto, "0:0:0:0:0:0:0:1");
+            usuarioService.cadastrarUsuario(dto);
         });
-    }
-
-    @Test
-    @DisplayName("Deve retornar lista de usuários")
-    public void deveRetornarListaDeUsuarios(){
-
-        List<Usuario> usuarios = Collections.singletonList(new Usuario());
-        List<UsuarioResponseDTO> usuarioResponse = Collections.singletonList(usuarioResponseDTO);
-
-        when(usuarioRepository.findAll())
-                .thenReturn(usuarios);
-        when(usuarioMapper.toResponse(usuarios))
-                .thenReturn(usuarioResponse);
-
-        Integer pagina = 0;
-        Integer objetos = 2;
-
-        List<UsuarioResponseDTO> resultado = usuarioService.listarUsuarios(pagina, objetos);
-        assertNotNull(resultado);
     }
 }

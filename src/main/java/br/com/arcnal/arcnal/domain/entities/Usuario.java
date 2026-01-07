@@ -1,6 +1,9 @@
 package br.com.arcnal.arcnal.domain.entities;
 
 import br.com.arcnal.arcnal.domain.enums.Cargo;
+import br.com.arcnal.arcnal.domain.valueobjects.Email;
+import br.com.arcnal.arcnal.domain.valueobjects.NomeUsuario;
+import br.com.arcnal.arcnal.domain.valueobjects.Senha;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -27,11 +30,13 @@ public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String nome;
-    private String email;
-    private String senha;
-    @Column(name = "endereco_ip")
-    private String enderecoIp;
+    @Embedded
+    private NomeUsuario nome;
+    @Embedded
+    @AttributeOverride(name = "endereco", column = @Column(name = "email"))
+    private Email email;
+    @Embedded
+    private Senha senha;
     @Enumerated(EnumType.STRING)
     private Cargo cargo;
     private boolean banido;
@@ -41,6 +46,22 @@ public class Usuario implements UserDetails {
     @Column(name = "atualizado_em")
     @LastModifiedDate
     private LocalDateTime atualizadoEm;
+
+    public String getNome() {
+        return this.nome.getNome();
+    }
+
+    public String getEmail(){
+        return this.email.getEndereco();
+    }
+
+    public void setSenha(String senha){
+        this.senha.setSenha(senha);
+    }
+
+    public String getSenha(){
+        return this.senha.getSenha();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -59,12 +80,12 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getPassword() {
-        return senha;
+        return senha.getSenha();
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return email.getEndereco();
     }
 
     @Override
