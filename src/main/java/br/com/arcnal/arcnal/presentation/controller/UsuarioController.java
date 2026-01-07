@@ -1,12 +1,13 @@
 package br.com.arcnal.arcnal.presentation.controller;
 
 import br.com.arcnal.arcnal.domain.entities.Usuario;
-import br.com.arcnal.arcnal.application.dto.AutenticacaoRequestDTO;
-import br.com.arcnal.arcnal.application.dto.LoginResponseDTO;
-import br.com.arcnal.arcnal.application.dto.UsuarioRequestDTO;
-import br.com.arcnal.arcnal.application.dto.UsuarioResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.AutenticacaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.LoginResponseDTO;
+import br.com.arcnal.arcnal.application.dto.request.UsuarioRequestDTO;
+import br.com.arcnal.arcnal.application.dto.response.UsuarioResponseDTO;
 import br.com.arcnal.arcnal.infra.security.TokenService;
 import br.com.arcnal.arcnal.application.service.IUsuarioService;
+import br.com.arcnal.arcnal.presentation.controller.docs.UsuarioControllerDoc;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/usuario")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerDoc {
 
     @Autowired
     private IUsuarioService usuarioService;
@@ -27,17 +28,20 @@ public class UsuarioController {
     @Autowired
     private TokenService tokenService;
 
+    @Override
     @PostMapping("/cadastrar")
-    public ResponseEntity cadastrarUsuario(@Valid @RequestBody UsuarioRequestDTO dto, String enderecoIp) {
-        usuarioService.cadastrarUsuario(dto, enderecoIp);
+    public ResponseEntity cadastrarUsuario(@Valid @RequestBody UsuarioRequestDTO dto) {
+        usuarioService.cadastrarUsuario(dto);
         return ResponseEntity.ok().build();
     }
 
+    @Override
     @GetMapping("/listar")
     public ResponseEntity<List<UsuarioResponseDTO>> listarUsuarios(@RequestParam Integer pagina, Integer objetos){
         return ResponseEntity.ok().body(usuarioService.listarUsuarios(pagina, objetos));
     }
 
+    @Override
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AutenticacaoRequestDTO body){
         var emailSenha = new UsernamePasswordAuthenticationToken(body.email(), body.senha());

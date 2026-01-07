@@ -1,8 +1,8 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.application.service.AssuntoServiceImpl;
+import br.com.arcnal.arcnal.application.service.impl.AssuntoServiceImpl;
 import br.com.arcnal.arcnal.domain.repositories.MateriaRepository;
-import br.com.arcnal.arcnal.application.dto.AssuntoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.request.AssuntoRequestDTO;
 import br.com.arcnal.arcnal.domain.exception.MateriaNaoEncontradaException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

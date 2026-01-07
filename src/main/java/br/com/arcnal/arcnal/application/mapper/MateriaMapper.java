@@ -1,6 +1,6 @@
 package br.com.arcnal.arcnal.application.mapper;
 
-import br.com.arcnal.arcnal.application.dto.MateriaRequestDTO;
+import br.com.arcnal.arcnal.application.dto.request.MateriaRequestDTO;
 import br.com.arcnal.arcnal.domain.entities.Materia;
 import br.com.arcnal.arcnal.domain.valueobjects.Nome;
 import org.mapstruct.Mapper;

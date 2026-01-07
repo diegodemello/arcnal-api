@@ -1,6 +1,6 @@
 package br.com.arcnal.arcnal.service;
 
-import br.com.arcnal.arcnal.application.service.QuestaoServiceImpl;
+import br.com.arcnal.arcnal.application.service.impl.QuestaoServiceImpl;
 import br.com.arcnal.arcnal.domain.repositories.AssuntoRepository;
 import br.com.arcnal.arcnal.domain.repositories.BancaRepository;
 import br.com.arcnal.arcnal.domain.repositories.MateriaRepository;
@@ -8,7 +8,7 @@ import br.com.arcnal.arcnal.domain.repositories.QuestaoRepository;
 import br.com.arcnal.arcnal.domain.entities.Banca;
 import br.com.arcnal.arcnal.domain.entities.Materia;
 import br.com.arcnal.arcnal.domain.enums.Nivel;
-import br.com.arcnal.arcnal.application.dto.QuestaoRequestDTO;
+import br.com.arcnal.arcnal.application.dto.request.QuestaoRequestDTO;
 import br.com.arcnal.arcnal.domain.exception.AlternativaInvalidaException;
 import br.com.arcnal.arcnal.domain.exception.AnoInvalidoException;
 import br.com.arcnal.arcnal.domain.exception.AssuntoNaoEncontradoException;
@@ -57,7 +57,7 @@ class QuestaoServiceImplTest {
     @Test
     @DisplayName("Deve retornar exceção quando enunciado for repetido")
     public void deveRetornarExcecaoQuandoEnunciadoForRepetido() {
-        when(questaoRepository.existsByEnunciado(request.enunciado()))
+        when(questaoRepository.existsByMetadadosEnunciado(request.enunciado()))
                 .thenReturn(true);
         assertThrows(EnunciadoExistenteException.class, () -> {
             questaoService.adicionarQuestao(request);
@@ -72,7 +72,7 @@ class QuestaoServiceImplTest {
                 "Madrid", "Paris", "Roma",
                 "Lisboa", 'A', "A capital da França é Paris.", "http://video.com/correcao");
 
-        when(questaoRepository.existsByEnunciado(request.enunciado()))
+        when(questaoRepository.existsByMetadadosEnunciado(request.enunciado()))
                 .thenReturn(false);
 
         assertThrows(AnoInvalidoException.class, () -> {

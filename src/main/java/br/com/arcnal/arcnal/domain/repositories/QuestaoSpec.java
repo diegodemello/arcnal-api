@@ -18,7 +18,7 @@ public class QuestaoSpec {
     private static Specification<Questao> porAno(Integer ano) {
         return (root, query, builder) -> {
             if(Objects.nonNull(ano)){
-                return builder.equal(root.get("ano"), ano);
+                return builder.equal(root.get("metadados").get("ano"), ano);
             }
             return null;
         };
