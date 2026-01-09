@@ -1,23 +1,22 @@
 package br.com.arcnal.arcnal.application.service.impl;
 
 import br.com.arcnal.arcnal.application.service.IQuestaoService;
+import br.com.arcnal.arcnal.domain.entities.*;
 import br.com.arcnal.arcnal.domain.exception.*;
 import br.com.arcnal.arcnal.domain.repositories.*;
 import br.com.arcnal.arcnal.application.dto.request.QuestaoRequestDTO;
 import br.com.arcnal.arcnal.application.dto.response.QuestaoResponseDTO;
-import br.com.arcnal.arcnal.domain.entities.Assunto;
-import br.com.arcnal.arcnal.domain.entities.Banca;
-import br.com.arcnal.arcnal.domain.entities.Materia;
-import br.com.arcnal.arcnal.domain.entities.Questao;
 import br.com.arcnal.arcnal.application.dto.response.ResolucaoQuestaoResponseDTO;
 import br.com.arcnal.arcnal.application.dto.response.RespostaQuestaoResponseDTO;
 import br.com.arcnal.arcnal.application.mapper.QuestaoMapper;
+import br.com.arcnal.arcnal.infra.util.AuthFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 
@@ -31,6 +30,8 @@ public class QuestaoServiceImpl implements IQuestaoService {
     private final MateriaRepository materiaRepository;
     private final AssuntoRepository assuntoRepository;
     private final QuestaoMapper questaoMapper;
+    private final RespostaUsuarioRepository respostaUsuarioRepository;
+    private final AuthFacade authFacade;
 
     Integer ANO_ATUAL = Calendar.getInstance().get(Calendar.YEAR);
 
@@ -77,8 +78,13 @@ public class QuestaoServiceImpl implements IQuestaoService {
     public RespostaQuestaoResponseDTO responderQuestao(Integer idQuestao, Character alternativaEscolhida) {
         Questao questao = buscarQuestaoPorId(idQuestao);
         validarAlternativaEscolhida(alternativaEscolhida);
+
+        boolean acertou = verificarRespostaCorreta(questao, alternativaEscolhida);
+
+        Usuario usuario = authFacade.getUsuarioAutenticado();
+        registrarRespostaUsuario(questao, acertou, usuario);
         log.info("Questão com id = " + idQuestao + " foi respondida.");
-        if (verificarRespostaCorreta(questao, alternativaEscolhida)){
+        if(acertou){
             return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, true, questao.getAlternativaCorreta());
         }
         return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, false, questao.getAlternativaCorreta());
@@ -151,5 +157,16 @@ public class QuestaoServiceImpl implements IQuestaoService {
                 && alternativaEscolhida != 'E'){
             throw new AlternativaInvalidaException("Alternativa escolhida inválida. Deve ser uma letra entre A e E.");
         }
+    }
+
+    private void registrarRespostaUsuario(Questao questao, boolean acertou, Usuario usuario) {
+        RespostaUsuario respostaUsuario = new RespostaUsuario();
+        respostaUsuario.setUsuario(usuario);
+        respostaUsuario.setQuestao(questao);
+        respostaUsuario.setMateria(questao.getMateria());
+        respostaUsuario.setAssunto(questao.getAssunto());
+        respostaUsuario.setDataResposta(LocalDate.now());
+        respostaUsuario.setAcertou(acertou);
+        respostaUsuarioRepository.save(respostaUsuario);
     }
 }
