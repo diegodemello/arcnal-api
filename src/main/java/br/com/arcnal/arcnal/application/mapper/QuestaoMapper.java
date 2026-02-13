@@ -12,7 +12,9 @@ import org.mapstruct.ReportingPolicy;
 import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        unmappedTargetPolicy = ReportingPolicy.ERROR)
+        unmappedTargetPolicy = ReportingPolicy.ERROR,
+        uses = ImagemMapper.class
+)
 public interface QuestaoMapper {
 
     @Mapping(target = "id", ignore = true)
@@ -21,6 +23,7 @@ public interface QuestaoMapper {
     @Mapping(target = "materia", ignore = true)
     @Mapping(target = "banca", ignore = true)
     @Mapping(target = "assunto", ignore = true)
+    @Mapping(target = "imagens", ignore = true)
     @Mapping(target = "alternativas.alternativaA", source = "dto.alternativaA")
     @Mapping(target = "alternativas.alternativaB", source = "dto.alternativaB")
     @Mapping(target = "alternativas.alternativaC", source = "dto.alternativaC")
@@ -38,6 +41,7 @@ public interface QuestaoMapper {
     @Mapping(target = "assunto", source = "assunto.nome")
     @Mapping(target = "ano", source = "metadados.ano")
     @Mapping(target = "enunciado", source = "metadados.enunciado")
+    @Mapping(target = "imagens", source = "imagens")
     QuestaoResponseDTO toResponse(Questao entity);
 
     @Mapping(target = "banca", source = "banca.nome")

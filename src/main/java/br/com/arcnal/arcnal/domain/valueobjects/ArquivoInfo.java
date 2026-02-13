@@ -19,9 +19,9 @@ public class ArquivoInfo {
     private Long tamanho;
 
     public ArquivoInfo(String nomeArquivo, String caminho, Long tamanho) {
-        validarCaminho(this.caminho);
-        validarTamanhoArquivo(this.tamanho);
-        validarExtesaoArquivo(this.nomeArquivo);
+        validarCaminho(caminho);
+        validarTamanhoArquivo(tamanho);
+        validarExtesaoArquivo(nomeArquivo);
 
         this.nomeArquivo = nomeArquivo;
         this.caminho = caminho;

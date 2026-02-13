@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
+import java.util.List;
+
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ImagemMapper {
     @Mapping(target = "arquivoInfo.nomeArquivo", source = "nomeArquivo")
@@ -18,6 +20,8 @@ public interface ImagemMapper {
     @Mapping(target = "atualizadoEm", ignore = true)
     Imagem toEntity(ImagemRequestDTO dto);
 
-    @Mapping(target = "caminhoImagem", source = "caminho")
+    @Mapping(target = "caminhoImagem", source = "arquivoInfo.caminho")
     ImagemResponseDTO toResponseDTO(Imagem imagem);
+
+    List<ImagemResponseDTO> toResponses(List<Imagem> imagens);
 }
