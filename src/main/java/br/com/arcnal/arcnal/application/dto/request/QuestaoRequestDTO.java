@@ -3,6 +3,9 @@ package br.com.arcnal.arcnal.application.dto.request;
 import br.com.arcnal.arcnal.domain.enums.Nivel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public record QuestaoRequestDTO(
         @NotNull
@@ -15,6 +18,7 @@ public record QuestaoRequestDTO(
         Integer ano,
         @NotBlank(message = "O enunciado não pode ser vazio.")
         String enunciado,
+        List<MultipartFile> imagens,
         @NotNull
         Nivel nivel,
         @NotBlank(message = "A alternativa A é obrigatória.")
