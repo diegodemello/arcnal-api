@@ -11,6 +11,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "questoes")
@@ -37,6 +39,8 @@ public class Questao {
     @AttributeOverride(name = "enunciado", column = @Column(name = "enunciado"))
     @Embedded
     private Metadados metadados;
+    @OneToMany(mappedBy = "questao", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Imagem> imagens = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Nivel nivel;
