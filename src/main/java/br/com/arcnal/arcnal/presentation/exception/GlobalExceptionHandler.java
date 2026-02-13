@@ -103,6 +103,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
     }
 
+    @ExceptionHandler(ImagemInvalidaException.class)
+    public ResponseEntity<ExceptionResponse> handleImagemInvalida(ImagemInvalidaException ex){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), Instant.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+    }
+
     @ExceptionHandler(SenhaInvalidaException.class)
     public ResponseEntity<ExceptionResponse> handleSenhaInvalida(SenhaInvalidaException ex){
         ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), Instant.now());
