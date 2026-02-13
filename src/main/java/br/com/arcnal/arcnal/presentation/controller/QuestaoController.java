@@ -9,6 +9,7 @@ import br.com.arcnal.arcnal.application.service.IQuestaoService;
 import br.com.arcnal.arcnal.presentation.controller.docs.QuestaoControllerDoc;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +22,8 @@ public class QuestaoController implements QuestaoControllerDoc {
     IQuestaoService questaoService;
 
     @Override
-    @PostMapping
-    public ResponseEntity<QuestaoResponseDTO> adicionarQuestao(@Valid @RequestBody QuestaoRequestDTO dto){
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<QuestaoResponseDTO> adicionarQuestao(@Valid @ModelAttribute QuestaoRequestDTO dto){
         return ResponseEntity.ok().body(questaoService.adicionarQuestao(dto));
     }
 
