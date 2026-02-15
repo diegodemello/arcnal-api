@@ -41,10 +41,10 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/questao/*/responder").authenticated()
                         .requestMatchers(HttpMethod.GET, "/questao/*/resolucao").authenticated()
 
-                        .requestMatchers(HttpMethod.POST, "/questao").hasRole("PROFESSOR")
-                        .requestMatchers(HttpMethod.POST, "/materia").hasRole("PROFESSOR")
-                        .requestMatchers(HttpMethod.POST, "/banca").hasRole("PROFESSOR")
-                        .requestMatchers(HttpMethod.POST, "/assunto").hasRole("PROFESSOR")
+                        .requestMatchers(HttpMethod.POST, "/questao").hasAnyRole("PROFESSOR", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/materia").hasAnyRole("PROFESSOR", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/banca").hasAnyRole("PROFESSOR", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/assunto").hasAnyRole("PROFESSOR", "ADMIN")
 
                         .requestMatchers(HttpMethod.GET, "/usuario/listar").hasRole("ADMIN")
 
