@@ -10,7 +10,7 @@ import br.com.arcnal.arcnal.application.dto.response.ResolucaoQuestaoResponseDTO
 import br.com.arcnal.arcnal.application.dto.response.RespostaQuestaoResponseDTO;
 import br.com.arcnal.arcnal.application.mapper.QuestaoMapper;
 import br.com.arcnal.arcnal.domain.valueobjects.ArquivoInfo;
-import br.com.arcnal.arcnal.infra.storage.FileStorageService;
+import br.com.arcnal.arcnal.infra.storage.AzureBlobStorageService;
 import br.com.arcnal.arcnal.infra.util.AuthFacade;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class QuestaoServiceImpl implements IQuestaoService {
     private final QuestaoMapper questaoMapper;
     private final RespostaUsuarioRepository respostaUsuarioRepository;
     private final AuthFacade authFacade;
-    private final FileStorageService fileStorageService;
+    private final AzureBlobStorageService azureBlobStorageService;
     private final ImagemRepository imagemRepository;
 
     Integer ANO_ATUAL = Calendar.getInstance().get(Calendar.YEAR);
@@ -117,7 +117,7 @@ public class QuestaoServiceImpl implements IQuestaoService {
     private void processarImagens(Questao questao, List<MultipartFile> arquivos){
         arquivos.forEach(arquivo -> {
             try{
-                String caminho = fileStorageService.salvarArquivo(arquivo);
+                String caminho = azureBlobStorageService.salvarArquivo(arquivo);
 
                 Imagem imagem = new Imagem();
                 imagem.setArquivoInfo(new ArquivoInfo(
