@@ -45,6 +45,9 @@ public class QuestaoServiceImpl implements IQuestaoService {
     @Qualifier("questoesCriadas")
     private final Counter questoesCriadas;
 
+    @Qualifier("questoesRespondidas")
+    private final Counter questoesRespondidas;
+
     Integer ANO_ATUAL = Calendar.getInstance().get(Calendar.YEAR);
 
     @Override
@@ -107,6 +110,7 @@ public class QuestaoServiceImpl implements IQuestaoService {
         Usuario usuario = authFacade.getUsuarioAutenticado();
         registrarRespostaUsuario(questao, acertou, usuario);
         log.info("Questão com id = " + idQuestao + " foi respondida.");
+        questoesRespondidas.increment();
         if(acertou){
             return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, true, questao.getAlternativaCorreta());
         }

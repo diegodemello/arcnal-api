@@ -15,8 +15,10 @@ import br.com.arcnal.arcnal.domain.exception.QuestaoNaoEncontradaException;
 import br.com.arcnal.arcnal.domain.exception.RevisoesExistentesException;
 import br.com.arcnal.arcnal.domain.exception.UsuarioNaoEncontradoException;
 import br.com.arcnal.arcnal.application.mapper.RevisaoMapper;
+import io.micrometer.core.instrument.Counter;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,9 @@ public class RevisaoServiceImpl implements IRevisaoService {
     private final UsuarioRepository usuarioRepository;
     private final QuestaoRepository questaoRepository;
 
+    @Qualifier("revisoesCriadas")
+    private final Counter revisoesCriadas;
+
     @Override
     public void criarRevisao(RevisaoRequestDTO dto, String email) {
 
@@ -45,6 +50,7 @@ public class RevisaoServiceImpl implements IRevisaoService {
         revisao.setQuestoes(questoes);
 
         revisaoRepository.save(revisao);
+        revisoesCriadas.increment();
     }
 
     @Override

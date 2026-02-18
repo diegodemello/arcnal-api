@@ -10,7 +10,9 @@ import br.com.arcnal.arcnal.domain.entities.Assunto;
 import br.com.arcnal.arcnal.domain.entities.Materia;
 import br.com.arcnal.arcnal.domain.exception.MateriaNaoEncontradaException;
 import br.com.arcnal.arcnal.application.mapper.AssuntoMapper;
+import io.micrometer.core.instrument.Counter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,9 @@ public class AssuntoServiceImpl implements IAssuntoService {
     private final MateriaRepository materiaRepository;
     private final AssuntoMapper assuntoMapper;
 
+    @Qualifier("assuntosCriados")
+    private final Counter assuntosCriados;
+
     @Override
     public AssuntoResponseDTO criarNovoAssunto(AssuntoRequestDTO dto) {
         Materia materia = buscarMateriaPorId(dto.idMateria());
@@ -30,6 +35,7 @@ public class AssuntoServiceImpl implements IAssuntoService {
         Assunto assunto = assuntoMapper.toEntity(dto);
         assunto.setMateria(materia);
         assuntoRepository.save(assunto);
+        assuntosCriados.increment();
 
         return assuntoMapper.toResponse(assunto);
     }
