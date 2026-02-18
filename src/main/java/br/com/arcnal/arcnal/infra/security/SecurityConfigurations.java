@@ -53,6 +53,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/assunto/materia/listar/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/banca").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuario/cadastrar", "/usuario/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/actuator/*", "/actuator/metrics/*").permitAll() // Não sobe para PROD
 
                         .requestMatchers(HttpMethod.GET, "/v3/api-docs/**",
                                 "/swagger-ui/**").permitAll()

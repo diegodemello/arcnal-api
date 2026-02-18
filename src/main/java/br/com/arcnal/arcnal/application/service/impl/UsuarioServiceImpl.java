@@ -8,6 +8,7 @@ import br.com.arcnal.arcnal.domain.entities.Usuario;
 import br.com.arcnal.arcnal.domain.enums.Cargo;
 import br.com.arcnal.arcnal.domain.exception.EmailEmUsoException;
 import br.com.arcnal.arcnal.application.mapper.UsuarioMapper;
+import io.micrometer.core.instrument.Counter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +24,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
+    private final Counter usuariosCadastrados;
 
     @Override
     public void cadastrarUsuario(UsuarioRequestDTO dto) {
@@ -33,6 +35,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
         usuario.setSenha(senhaCriptografada);
         usuarioRepository.save(usuario);
         log.info("Usuário criado com ID = " + usuario.getId() + " e email = " + usuario.getEmail());
+        usuariosCadastrados.increment();
     }
 
     @Override

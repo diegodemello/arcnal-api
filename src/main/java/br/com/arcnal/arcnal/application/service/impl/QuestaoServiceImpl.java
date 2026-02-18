@@ -12,9 +12,11 @@ import br.com.arcnal.arcnal.application.mapper.QuestaoMapper;
 import br.com.arcnal.arcnal.domain.valueobjects.ArquivoInfo;
 import br.com.arcnal.arcnal.infra.storage.AzureBlobStorageService;
 import br.com.arcnal.arcnal.infra.util.AuthFacade;
+import io.micrometer.core.instrument.Counter;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,9 @@ public class QuestaoServiceImpl implements IQuestaoService {
     private final AuthFacade authFacade;
     private final AzureBlobStorageService azureBlobStorageService;
     private final ImagemRepository imagemRepository;
+
+    @Qualifier("questoesCriadas")
+    private final Counter questoesCriadas;
 
     Integer ANO_ATUAL = Calendar.getInstance().get(Calendar.YEAR);
 
@@ -68,6 +73,7 @@ public class QuestaoServiceImpl implements IQuestaoService {
 
         questaoRepository.save(questao);
         log.info("Questão criada com id = " + questao.getId());
+        questoesCriadas.increment();
 
         QuestaoResponseDTO questaoResponseDTO = questaoMapper.toResponse(questao);
         return questaoResponseDTO;
