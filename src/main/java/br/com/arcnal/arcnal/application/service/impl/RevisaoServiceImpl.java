@@ -87,7 +87,7 @@ public class RevisaoServiceImpl implements IRevisaoService {
     }
 
     private Usuario buscarUsuarioPorEmail(String email){
-        return usuarioRepository.findAllByEmailEndereco(email)
+        return usuarioRepository.findByEmailEndereco(email)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado com o Email: " + email));
     }
 
