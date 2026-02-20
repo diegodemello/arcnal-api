@@ -8,7 +8,9 @@ import br.com.arcnal.arcnal.domain.repositories.SenhaRecuperadaRepository;
 import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
 import br.com.arcnal.arcnal.infra.util.EnvioDeEmail;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,8 @@ public class SenhaServiceImpl implements ISenhaService {
     private final EnvioDeEmail envioDeEmail;
 
     @Override
+    @Async
+    @Transactional
     public void recuperarSenha(String email) {
         validarEmail(email);
         if(existeUsuarioComEsseEmail(email)) {
