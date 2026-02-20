@@ -5,10 +5,14 @@ import jakarta.persistence.Embeddable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Embeddable
 @NoArgsConstructor
-public class Senha {
+public class Senha implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String senha;
 
     public Senha(String senha) {

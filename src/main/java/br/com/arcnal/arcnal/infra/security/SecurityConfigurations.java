@@ -41,10 +41,10 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/questao/*/responder").authenticated()
                         .requestMatchers(HttpMethod.GET, "/questao/*/resolucao").authenticated()
 
-                        .requestMatchers(HttpMethod.POST, "/questao").hasRole("PROFESSOR")
-                        .requestMatchers(HttpMethod.POST, "/materia").hasRole("PROFESSOR")
-                        .requestMatchers(HttpMethod.POST, "/banca").hasRole("PROFESSOR")
-                        .requestMatchers(HttpMethod.POST, "/assunto").hasRole("PROFESSOR")
+                        .requestMatchers(HttpMethod.POST, "/questao").hasAnyRole("PROFESSOR", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/materia").hasAnyRole("PROFESSOR", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/banca").hasAnyRole("PROFESSOR", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/assunto").hasAnyRole("PROFESSOR", "ADMIN")
 
                         .requestMatchers(HttpMethod.GET, "/usuario/listar").hasRole("ADMIN")
 
@@ -53,6 +53,8 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/assunto/materia/listar/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/banca").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuario/cadastrar", "/usuario/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/senha/recuperar", "/senha/redefinir").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/actuator/*", "/actuator/metrics/*").permitAll() // Não sobe para PROD
 
                         .requestMatchers(HttpMethod.GET, "/v3/api-docs/**",
                                 "/swagger-ui/**").permitAll()

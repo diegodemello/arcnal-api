@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Getter
 public class FileStorageConfig {
-    @Value("${file.upload-dir}")
-    private String uploadDir;
+    @Value("${azure.storage.container-name}")
+    private String containerName;
 
     @Value("${file.max-size}")
     private Long maxSize;

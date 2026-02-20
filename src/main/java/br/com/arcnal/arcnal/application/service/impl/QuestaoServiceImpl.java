@@ -10,11 +10,13 @@ import br.com.arcnal.arcnal.application.dto.response.ResolucaoQuestaoResponseDTO
 import br.com.arcnal.arcnal.application.dto.response.RespostaQuestaoResponseDTO;
 import br.com.arcnal.arcnal.application.mapper.QuestaoMapper;
 import br.com.arcnal.arcnal.domain.valueobjects.ArquivoInfo;
-import br.com.arcnal.arcnal.infra.storage.FileStorageService;
+import br.com.arcnal.arcnal.infra.storage.AzureBlobStorageService;
 import br.com.arcnal.arcnal.infra.util.AuthFacade;
+import io.micrometer.core.instrument.Counter;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,8 +39,14 @@ public class QuestaoServiceImpl implements IQuestaoService {
     private final QuestaoMapper questaoMapper;
     private final RespostaUsuarioRepository respostaUsuarioRepository;
     private final AuthFacade authFacade;
-    private final FileStorageService fileStorageService;
+    private final AzureBlobStorageService azureBlobStorageService;
     private final ImagemRepository imagemRepository;
+
+    @Qualifier("questoesCriadas")
+    private final Counter questoesCriadas;
+
+    @Qualifier("questoesRespondidas")
+    private final Counter questoesRespondidas;
 
     Integer ANO_ATUAL = Calendar.getInstance().get(Calendar.YEAR);
 
@@ -68,6 +76,7 @@ public class QuestaoServiceImpl implements IQuestaoService {
 
         questaoRepository.save(questao);
         log.info("Questão criada com id = " + questao.getId());
+        questoesCriadas.increment();
 
         QuestaoResponseDTO questaoResponseDTO = questaoMapper.toResponse(questao);
         return questaoResponseDTO;
@@ -101,6 +110,7 @@ public class QuestaoServiceImpl implements IQuestaoService {
         Usuario usuario = authFacade.getUsuarioAutenticado();
         registrarRespostaUsuario(questao, acertou, usuario);
         log.info("Questão com id = " + idQuestao + " foi respondida.");
+        questoesRespondidas.increment();
         if(acertou){
             return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, true, questao.getAlternativaCorreta());
         }
@@ -117,7 +127,7 @@ public class QuestaoServiceImpl implements IQuestaoService {
     private void processarImagens(Questao questao, List<MultipartFile> arquivos){
         arquivos.forEach(arquivo -> {
             try{
-                String caminho = fileStorageService.salvarArquivo(arquivo);
+                String caminho = azureBlobStorageService.salvarArquivo(arquivo);
 
                 Imagem imagem = new Imagem();
                 imagem.setArquivoInfo(new ArquivoInfo(

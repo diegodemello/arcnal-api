@@ -5,10 +5,14 @@ import jakarta.persistence.Embeddable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Embeddable
 @NoArgsConstructor
-public class Email {
+public class Email implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String endereco;
 
     public Email(String email) {
