@@ -13,6 +13,4 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
     @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN true ELSE false END FROM usuarios WHERE email = ?1", nativeQuery = true)
     boolean existsByEmail(String email);
     Optional<Usuario> findByEmailEndereco(String email);
-    Optional<Usuario> findAllByEmail(String email);
-    Optional<Usuario> findAllByEmailEndereco(String email);
 }
