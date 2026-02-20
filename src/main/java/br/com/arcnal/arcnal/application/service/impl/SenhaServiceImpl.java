@@ -6,8 +6,11 @@ import br.com.arcnal.arcnal.domain.entities.Usuario;
 import br.com.arcnal.arcnal.domain.exception.EmailInvalidoException;
 import br.com.arcnal.arcnal.domain.repositories.SenhaRecuperadaRepository;
 import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
+import br.com.arcnal.arcnal.infra.util.EnvioDeEmail;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +26,11 @@ public class SenhaServiceImpl implements ISenhaService {
     private final SenhaRecuperadaRepository senhaRecuperadaRepository;
     private final PasswordEncoder passwordEncoder;
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+    private final EnvioDeEmail envioDeEmail;
 
     @Override
+    @Async
+    @Transactional
     public void recuperarSenha(String email) {
         validarEmail(email);
         if(existeUsuarioComEsseEmail(email)) {
@@ -34,8 +40,9 @@ public class SenhaServiceImpl implements ISenhaService {
             senhaRecuperada.setToken(tokenGerado);
             senhaRecuperada.setUtilizado(false);
             senhaRecuperada.setDataExpiracao(LocalDateTime.now().plusMinutes(30));
-
             senhaRecuperadaRepository.save(senhaRecuperada);
+
+            enviarEmailDeRecuperacao(tokenGerado, email);
         }
     }
 
@@ -51,6 +58,17 @@ public class SenhaServiceImpl implements ISenhaService {
 
         usuarioRepository.save(usuario);
         senhaRecuperadaRepository.save(senhaRecuperada);
+    }
+
+    private void enviarEmailDeRecuperacao(String token, String email) {
+        if(email.isBlank() || email == null){
+            throw new EmailInvalidoException("O email não pode ser vazio ou nulo.");
+        }
+        if(token.isBlank() || token == null){
+            throw new IllegalArgumentException("O token não pode ser vazio ou nulo.");
+        }
+        envioDeEmail.enviarEmail(email, "Arcnal - Recuperação de Senha",
+                "Você tem 30 minutos para redefinir sua senha usando o seguinte token: " + token);
     }
 
     private void validarEmail(String email){
