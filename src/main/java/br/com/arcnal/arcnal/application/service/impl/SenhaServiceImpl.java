@@ -14,6 +14,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Base64;
@@ -61,14 +63,76 @@ public class SenhaServiceImpl implements ISenhaService {
     }
 
     private void enviarEmailDeRecuperacao(String token, String email) {
-        if(email.isBlank() || email == null){
+        if(email == null || email.isBlank()){
             throw new EmailInvalidoException("O email não pode ser vazio ou nulo.");
         }
-        if(token.isBlank() || token == null){
+        if(token == null || token.isBlank()){
             throw new IllegalArgumentException("O token não pode ser vazio ou nulo.");
         }
-        envioDeEmail.enviarEmail(email, "Arcnal - Recuperação de Senha",
-                "Você tem 30 minutos para redefinir sua senha usando o seguinte token: " + token);
+
+        Usuario usuario = obterUsuarioPorToken(token);
+
+        String link = "https://arcnal.com.br/reset-password?token=" +
+                URLEncoder.encode(token, StandardCharsets.UTF_8);
+
+        String html = """
+          <table style="margin:0; padding:0; background-color:#f4f4f4; font-family: Arial, Helvetica, sans-serif;" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f4f4f4">
+            <tr>
+              <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="margin: 20px auto;">
+                  <tr>
+                    <td align="center">
+                      <img src="arcnal-email-header.jpg" alt="Arcnal" width="600" style="display:block; width:100%; max-width:600px;">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:40px 40px 20px 40px; color:#333333; font-size:16px; line-height:1.6;">
+                      <p style="margin:0 0 20px 0;">Olá, <strong>{{nome}}</strong>.</p>
+                      <p style="margin:0 0 20px 0;">
+                        Recebemos uma solicitação para redefinir a senha da sua conta na <strong>Arcnal</strong>.
+                      </p>
+                      <p style="margin:0 0 30px 0;">
+                        Para criar uma nova senha, clique no botão abaixo:
+                      </p>
+                      <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:30px;">
+                        <tr>
+                          <td align="center" bgcolor="#75A932" style="border-radius:6px;">
+                            <a href="{{link_recuperacao}}"
+                               target="_blank"
+                               style="display:inline-block; padding:14px 28px; font-size:16px; color:#ffffff; text-decoration:none; font-weight:bold;">
+                               Redefinir senha
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                      <p style="margin:0 0 15px 0; font-size:14px; color:#555555;">
+                        Este link é pessoal e válido por <strong>30 minutos</strong>.
+                      </p>
+                      <p style="margin:0 0 20px 0; font-size:14px; color:#555555;">
+                        Caso você não tenha solicitado essa alteração, desconsidere este e-mail. Nenhuma modificação será realizada sem a confirmação pelo link acima.
+                      </p>
+                      <p style="margin:30px 0 0 0;">
+                        Atenciosamente,<br>
+                        <strong>Equipe Arcnal</strong>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center">
+                      <img src="arcnal-email-footer.jpg" alt="Arcnal Footer" width="600" style="display:block; width:100%; max-width:600px;">
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+          """;
+        html = html.replace("{{link_recuperacao}}", link);
+        html = html.replace("{{nome}}", usuario.getNome());
+        
+
+        envioDeEmail.enviarEmail(email, "Arcnal - Recuperação de senha",
+                html);
     }
 
     private void validarEmail(String email){
