@@ -49,7 +49,7 @@ class RevisaoServiceImplTest {
     @Test
     @DisplayName("Deve lançar exceção quando usuário inexistente for consultado")
     public void deveRetornarUsuarioNaoEncontradoExceptionQuandoUsuarioInexistente() {
-        Mockito.when(usuarioRepository.findAllByEmailEndereco(emailUsuario))
+        Mockito.when(usuarioRepository.findByEmailEndereco(emailUsuario))
                 .thenReturn(Optional.empty());
         Assertions.assertThrows(UsuarioNaoEncontradoException.class, () -> {
            revisaoService.criarRevisao(request, emailUsuario);
@@ -59,7 +59,7 @@ class RevisaoServiceImplTest {
     @Test
     @DisplayName("Deve lançar exceção quando questão inexistente for consultada")
     public void deveRetornarQuestaoNaoEncontradaExceptionQuandoQuestaoInexistente() {
-        Mockito.when(usuarioRepository.findAllByEmailEndereco(emailUsuario))
+        Mockito.when(usuarioRepository.findByEmailEndereco(emailUsuario))
                 .thenReturn(Optional.of(new Usuario()));
         Mockito.when(questaoRepository.findAllById(request.idQuestoes()))
                 .thenReturn(Collections.emptyList());

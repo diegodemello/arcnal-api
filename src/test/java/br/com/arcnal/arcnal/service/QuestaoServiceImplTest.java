@@ -49,7 +49,7 @@ class QuestaoServiceImplTest {
     @BeforeEach
     public void setUp() {
         request = new QuestaoRequestDTO(1, 2, 1, 2010,
-                "Qual a capital da França?", Nivel.MEDIO, "Berlim",
+                "Qual a capital da França?", null, Nivel.MEDIO, "Berlim",
                 "Madrid", "Paris", "Roma",
                 "Lisboa", 'A', "A capital da França é Paris.", "http://video.com/correcao");
     }
@@ -68,7 +68,7 @@ class QuestaoServiceImplTest {
     @DisplayName("Deve retornar exceção quando ano for inválido")
     public void deveRetornarExcecaoQuandoAnoForInvalido() {
         QuestaoRequestDTO requestAnoInvalido = new QuestaoRequestDTO(1, 2, 1, 2050,
-                "Qual a capital da França?", Nivel.MEDIO, "Berlim",
+                "Qual a capital da França?", null, Nivel.MEDIO, "Berlim",
                 "Madrid", "Paris", "Roma",
                 "Lisboa", 'A', "A capital da França é Paris.", "http://video.com/correcao");
 
@@ -84,7 +84,7 @@ class QuestaoServiceImplTest {
     @DisplayName("Deve retornar exceção quando alternativa correta for inválida")
     public void deveRetornarExcecaoQuandoAlternativaCorretaForInvalida() {
         QuestaoRequestDTO requestAlternativaInvalida = new QuestaoRequestDTO(1, 2, 1, 2010,
-                "Qual a capital da França?", Nivel.MEDIO, "Berlim",
+                "Qual a capital da França?", null, Nivel.MEDIO, "Berlim",
                 "Madrid", "Paris", "Roma",
                 "Lisboa", 'F', "A capital da França é Paris.", "http://video.com/correcao");
         assertThrows(AlternativaInvalidaException.class, () -> {
