@@ -9,6 +9,10 @@ import br.com.arcnal.arcnal.application.dto.request.UsuarioRequestDTO;
 import br.com.arcnal.arcnal.application.dto.response.UsuarioResponseDTO;
 import br.com.arcnal.arcnal.domain.exception.EmailEmUsoException;
 import br.com.arcnal.arcnal.application.mapper.UsuarioMapper;
+import br.com.arcnal.arcnal.domain.valueobjects.Email;
+import br.com.arcnal.arcnal.domain.valueobjects.NomeUsuario;
+import br.com.arcnal.arcnal.domain.valueobjects.Senha;
+import io.micrometer.core.instrument.Counter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,6 +42,9 @@ class UsuarioServiceImplTest {
     @Mock
     private UsuarioMapper usuarioMapper;
 
+    @Mock
+    Counter usuariosCadastrados;
+
     private UsuarioRequestDTO dto;
     private UsuarioResponseDTO usuarioResponseDTO;
 
@@ -61,5 +68,28 @@ class UsuarioServiceImplTest {
         assertThrows(EmailEmUsoException.class, () -> {
             usuarioService.cadastrarUsuario(dto);
         });
+    }
+
+    @Test
+    @DisplayName("Deve cadastrar usuário com sucesso")
+    public void deveCadastrarUsuarioComSucesso() {
+        UsuarioRequestDTO dto = new UsuarioRequestDTO("Teste da Silva", "test@gmail.com", "Teste123#");
+        Usuario usuario = new Usuario(UUID.randomUUID(),
+                new NomeUsuario("Teste da Silva"),
+                new Email("test@gmail.com"),
+                new Senha("Teste123#"),
+                Cargo.USUARIO,
+                false,
+                null,
+                null
+        );
+        when(usuarioRepository.existsByEmail("test@gmail.com"))
+                .thenReturn(false);
+        when(usuarioMapper.toEntity(dto))
+                .thenReturn(usuario);
+        when(usuarioRepository.save(usuario))
+                .thenReturn(usuario);
+
+        usuarioService.cadastrarUsuario(dto);
     }
 }

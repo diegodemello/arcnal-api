@@ -76,8 +76,8 @@ class BancaServiceImplTest {
     @DisplayName("Deve retornar todas as bancas existentes")
     public void deveRetornarTodasAsBancasExistentes(){
         List<Banca> bancas = List.of(
-                new Banca(1, new Nome("Banca 1")),
-                new Banca(2, new Nome("Banca 2"))
+                new Banca(1, new Nome("Banca")),
+                new Banca(2, new Nome("Banca"))
         );
 
         when(bancaRepository.findAll())
