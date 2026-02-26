@@ -14,6 +14,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Base64;
@@ -27,6 +29,7 @@ public class SenhaServiceImpl implements ISenhaService {
     private final PasswordEncoder passwordEncoder;
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
     private final EnvioDeEmail envioDeEmail;
+    private final EmailTemplateServiceImpl emailTemplateService;
 
     @Override
     @Async
@@ -61,14 +64,22 @@ public class SenhaServiceImpl implements ISenhaService {
     }
 
     private void enviarEmailDeRecuperacao(String token, String email) {
-        if(email.isBlank() || email == null){
+        if(email == null || email.isBlank()){
             throw new EmailInvalidoException("O email não pode ser vazio ou nulo.");
         }
-        if(token.isBlank() || token == null){
+        if(token == null || token.isBlank()){
             throw new IllegalArgumentException("O token não pode ser vazio ou nulo.");
         }
-        envioDeEmail.enviarEmail(email, "Arcnal - Recuperação de Senha",
-                "Você tem 30 minutos para redefinir sua senha usando o seguinte token: " + token);
+
+        Usuario usuario = obterUsuarioPorToken(token);
+
+        String link = "https://arcnal.com.br/reset-password?token=" +
+                URLEncoder.encode(token, StandardCharsets.UTF_8);
+
+        String html = emailTemplateService.gerarEmailRecuperacao(usuario.getNome(), link);
+
+        envioDeEmail.enviarEmail(email, "Arcnal - Recuperação de senha",
+                html);
     }
 
     private void validarEmail(String email){

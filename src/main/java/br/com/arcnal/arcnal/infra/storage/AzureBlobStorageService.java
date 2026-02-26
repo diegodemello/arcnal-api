@@ -9,6 +9,7 @@ import com.azure.storage.blob.implementation.util.BlobHeadersAndQueryParameters;
 import com.azure.storage.blob.models.BlobHttpHeaders;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Service
+@ConditionalOnProperty(name = "spring.cloud.azure.storage.blob.enabled", havingValue = "true", matchIfMissing = true)
 @Slf4j
 @RequiredArgsConstructor
 public class AzureBlobStorageService {

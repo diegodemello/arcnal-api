@@ -60,6 +60,7 @@ public class RevisaoServiceImpl implements IRevisaoService {
         Revisao revisao = revisaoRepository.findById(idRevisao)
                 .orElseThrow(() -> new RevisoesExistentesException("Não existe uma revisão para esse ID."));
         revisao.getQuestoes().addAll(questoes);
+        revisaoRepository.save(revisao);
     }
 
     @Override

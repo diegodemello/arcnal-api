@@ -29,12 +29,12 @@ public class EnvioDeEmail {
                 .buildClient();
     }
 
-    public void enviarEmail(String destinatario, String assunto, String corpo) {
+    public void enviarEmail(String destinatario, String assunto, String html) {
         EmailMessage mensagem = new EmailMessage()
                 .setSenderAddress(senderEmail)
                 .setToRecipients(destinatario)
                 .setSubject(assunto)
-                .setBodyPlainText(corpo);
+                .setBodyHtml(html);
 
         SyncPoller<EmailSendResult, EmailSendResult> poller = emailClient.beginSend(mensagem);
         PollResponse<EmailSendResult> response = poller.waitForCompletion();
