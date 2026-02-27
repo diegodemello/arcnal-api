@@ -8,6 +8,7 @@ import br.com.arcnal.arcnal.domain.repositories.SenhaRecuperadaRepository;
 import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
 import br.com.arcnal.arcnal.infra.util.EnvioDeEmail;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import io.micrometer.core.instrument.Counter;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -30,6 +31,9 @@ public class SenhaServiceImpl implements ISenhaService {
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
     private final EnvioDeEmail envioDeEmail;
     private final EmailTemplateServiceImpl emailTemplateService;
+    private final Counter senhasRedefinidas;
+
+    private static final int MAX_TOKENS_POR_USUARIO = 5;
 
     @Override
     @Async
@@ -37,6 +41,7 @@ public class SenhaServiceImpl implements ISenhaService {
     public void recuperarSenha(String email) {
         validarEmail(email);
         if(existeUsuarioComEsseEmail(email)) {
+            validarSePodeRedefinirSenha(email);
             String tokenGerado = gerarTokenRecuperacaoSenha();
             SenhaRecuperada senhaRecuperada = new SenhaRecuperada();
             senhaRecuperada.setUsuario(usuarioRepository.findByEmailEndereco(email).orElse(null));
@@ -44,7 +49,7 @@ public class SenhaServiceImpl implements ISenhaService {
             senhaRecuperada.setUtilizado(false);
             senhaRecuperada.setDataExpiracao(LocalDateTime.now().plusMinutes(30));
             senhaRecuperadaRepository.save(senhaRecuperada);
-
+            senhasRedefinidas.increment();
             enviarEmailDeRecuperacao(tokenGerado, email);
         }
     }
@@ -116,5 +121,22 @@ public class SenhaServiceImpl implements ISenhaService {
         SenhaRecuperada senhaRecuperada = senhaRecuperadaRepository.findByToken(token)
                 .orElseThrow(() -> new TokenExpiredException("O token de recuperação de senha expirou ou já foi utilizado.", null));
         return senhaRecuperada.getUsuario();
+    }
+
+    private Usuario obterUsuarioPorEmail(String email){
+        return usuarioRepository.findByEmailEndereco(email)
+                .orElseThrow(() -> new EmailInvalidoException("Não existe um usuário cadastrado com o email " + email));
+    }
+
+    private void validarSePodeRedefinirSenha(String email){
+        Usuario usuario = obterUsuarioPorEmail(email);
+        LocalDateTime agora = LocalDateTime.now();
+        Long quantidade = senhaRecuperadaRepository.findAllByUsuarioId(usuario.getId())
+                .stream()
+                .filter(s -> s.getDataExpiracao().isAfter(agora) && s.getDataExpiracao().toLocalDate().equals(agora.toLocalDate()))
+                .count();
+        if(quantidade > MAX_TOKENS_POR_USUARIO){
+            throw new EmailInvalidoException("Limite de tentativas de recuperação de senha atingido para o email " + email + ". Por favor, tente novamente amanhã.");
+        }
     }
 }

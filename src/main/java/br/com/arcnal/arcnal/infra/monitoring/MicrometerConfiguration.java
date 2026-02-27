@@ -74,4 +74,13 @@ public class MicrometerConfiguration {
                 .description("Contador de revisões criadas")
                 .register(meterRegistry);
     }
+
+    @Bean
+    @Qualifier("senhasRedefinidas")
+    public Counter senhasRedefinidas(){
+        return Counter
+                .builder("senhasRedefinidas")
+                .description("Contador de senhas redefinidas")
+                .register(meterRegistry);
+    }
 }
