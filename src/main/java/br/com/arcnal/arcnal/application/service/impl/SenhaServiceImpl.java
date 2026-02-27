@@ -133,7 +133,7 @@ public class SenhaServiceImpl implements ISenhaService {
         LocalDateTime agora = LocalDateTime.now();
         Long quantidade = senhaRecuperadaRepository.findAllByUsuarioId(usuario.getId())
                 .stream()
-                .filter(s -> s.getDataExpiracao().isAfter(agora) && s.getDataExpiracao().toLocalDate().equals(agora.toLocalDate()))
+                .filter(s -> s.getDataExpiracao().toLocalDate().equals(agora.toLocalDate()))
                 .count();
         if(quantidade > MAX_TOKENS_POR_USUARIO){
             throw new EmailInvalidoException("Limite de tentativas de recuperação de senha atingido para o email " + email + ". Por favor, tente novamente amanhã.");
