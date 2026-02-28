@@ -5,13 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(
-        name = "estatisticas_usuarios",
-        indexes = {
-                @Index(name = "idx_usuario_periodo", columnList = "usuario_id, periodo"),
-                @Index(name = "idx_usuario_materia_periodo", columnList = "usuario_id, materia_id, periodo")
-        }
-)
+@Table(name = "estatisticas_usuarios")
 public class EstatisticaUsuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +22,6 @@ public class EstatisticaUsuario {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assunto_id")
     private Assunto assunto;
-
-    @Column(nullable = false, length = 20)
-    private String periodo;
 
     @Column(name = "total_respondidas", nullable = false)
     private Integer totalRespondidas;
