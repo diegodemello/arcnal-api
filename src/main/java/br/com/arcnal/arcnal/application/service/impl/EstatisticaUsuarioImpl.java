@@ -29,7 +29,7 @@ public class EstatisticaUsuarioImpl implements IEstatisticaUsuarioService {
         Long materias = repository.materiasEstudadas(usuario.getId());
         List<DesempenhoResponseDTO> porMateria = repository.buscarDesempenhoPorMateria(usuario.getId());
         List<DesempenhoResponseDTO> porAssunto = repository.buscarDesempenhoPorAssunto(usuario.getId());
-        Long revisoes = revisaoService.listarRevisoesPorUsuario(usuario.getId()).stream().count();
+        Long revisoes = revisaoService.quantidadeDeRevisoesPorUsuario(usuario.getId());
         double taxa = resumo.totalRespondidas() == 0
                 ? 0
                 : (resumo.totalAcertos() * 100.0) / resumo.totalRespondidas();

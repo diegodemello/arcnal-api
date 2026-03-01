@@ -74,6 +74,11 @@ public class RevisaoServiceImpl implements IRevisaoService {
     }
 
     @Override
+    public Long quantidadeDeRevisoesPorUsuario(UUID idUsuario) {
+        return revisaoRepository.countByUsuarioId(idUsuario);
+    }
+
+    @Override
     public DetalheRevisaoResponseDTO listarRevisao(Integer pagina, Integer objetos, UUID idRevisao) {
         Revisao revisao = revisaoRepository.findById(idRevisao)
                 .orElseThrow(() -> new RevisoesExistentesException("Revisão não encontrada com o ID: " + idRevisao));

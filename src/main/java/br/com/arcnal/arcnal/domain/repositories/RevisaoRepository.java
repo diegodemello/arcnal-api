@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface RevisaoRepository extends JpaRepository<Revisao, UUID> {
     List<Revisao> findAllByUsuarioId(UUID idUsuario);
+    Long countByUsuarioId(UUID idUsuario);
 }
