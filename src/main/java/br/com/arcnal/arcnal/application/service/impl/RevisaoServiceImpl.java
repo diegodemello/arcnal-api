@@ -75,7 +75,7 @@ public class RevisaoServiceImpl implements IRevisaoService {
 
     @Override
     public Long quantidadeDeRevisoesPorUsuario(UUID idUsuario) {
-        return revisaoRepository.countByUsuarioId(idUsuario);
+        return revisaoRepository.contarRevisoes(idUsuario);
     }
 
     @Override

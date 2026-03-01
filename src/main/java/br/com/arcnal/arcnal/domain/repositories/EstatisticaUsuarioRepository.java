@@ -9,7 +9,6 @@ import br.com.arcnal.arcnal.domain.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,19 +25,13 @@ public interface EstatisticaUsuarioRepository extends JpaRepository<EstatisticaU
     SELECT new br.com.arcnal.arcnal.application.dto.response.DadosGeraisEstatisticaResponseDTO(
             CAST(COALESCE(SUM(e.totalRespondidas), 0L) AS long),
             CAST(COALESCE(SUM(e.totalAcertos), 0L) AS long),
-            CAST(COALESCE(SUM(e.totalErros), 0L) AS long) 
+            CAST(COALESCE(SUM(e.totalErros), 0L) AS long),
+            COUNT(DISTINCT e.materia.id)
         )
         FROM EstatisticaUsuario e
         WHERE e.usuario.id = :usuario
     """)
     DadosGeraisEstatisticaResponseDTO buscarResumoGeral(UUID usuario);
-
-    @Query("""
-        SELECT COUNT(DISTINCT e.materia.id)
-        FROM EstatisticaUsuario e
-        WHERE e.usuario.id = :usuario
-    """)
-    Long materiasEstudadas(UUID usuario);
 
     @Query("""
         SELECT new br.com.arcnal.arcnal.application.dto.response.DesempenhoResponseDTO(

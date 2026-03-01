@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -24,12 +25,11 @@ public class EstatisticaUsuarioImpl implements IEstatisticaUsuarioService {
     private final AuthFacade authFacade;
 
     public EstatisticaUsuarioResponseDTO buscarEstatistica(){
-        Usuario usuario = authFacade.getUsuarioAutenticado();
-        DadosGeraisEstatisticaResponseDTO resumo = repository.buscarResumoGeral(usuario.getId());
-        Long materias = repository.materiasEstudadas(usuario.getId());
-        List<DesempenhoResponseDTO> porMateria = repository.buscarDesempenhoPorMateria(usuario.getId());
-        List<DesempenhoResponseDTO> porAssunto = repository.buscarDesempenhoPorAssunto(usuario.getId());
-        Long revisoes = revisaoService.quantidadeDeRevisoesPorUsuario(usuario.getId());
+        UUID usuarioId = authFacade.getUsuarioAutenticado().getId();
+        DadosGeraisEstatisticaResponseDTO resumo = repository.buscarResumoGeral(usuarioId);
+        List<DesempenhoResponseDTO> porMateria = repository.buscarDesempenhoPorMateria(usuarioId);
+        List<DesempenhoResponseDTO> porAssunto = repository.buscarDesempenhoPorAssunto(usuarioId);
+        Long revisoes = revisaoService.quantidadeDeRevisoesPorUsuario(usuarioId);
         double taxa = resumo.totalRespondidas() == 0
                 ? 0
                 : (resumo.totalAcertos() * 100.0) / resumo.totalRespondidas();
@@ -38,7 +38,7 @@ public class EstatisticaUsuarioImpl implements IEstatisticaUsuarioService {
                 resumo.totalRespondidas(),
                 taxa,
                 revisoes,
-                materias,
+                resumo.materiasEstudadas(),
                 porMateria,
                 porAssunto
         );
