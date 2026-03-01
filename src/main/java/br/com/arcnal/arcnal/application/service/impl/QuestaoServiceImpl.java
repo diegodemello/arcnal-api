@@ -2,6 +2,7 @@ package br.com.arcnal.arcnal.application.service.impl;
 
 import br.com.arcnal.arcnal.application.service.IQuestaoService;
 import br.com.arcnal.arcnal.domain.entities.*;
+import br.com.arcnal.arcnal.domain.event.QuestaoRespondidaEvent;
 import br.com.arcnal.arcnal.domain.exception.*;
 import br.com.arcnal.arcnal.domain.repositories.*;
 import br.com.arcnal.arcnal.application.dto.request.QuestaoRequestDTO;
@@ -17,6 +18,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,6 +42,7 @@ public class QuestaoServiceImpl implements IQuestaoService {
     private final RespostaUsuarioRepository respostaUsuarioRepository;
     private final AuthFacade authFacade;
     private final AzureBlobStorageService azureBlobStorageService;
+    private final ApplicationEventPublisher applicationEventPublisher;
     private final ImagemRepository imagemRepository;
 
     @Qualifier("questoesCriadas")
@@ -100,6 +103,7 @@ public class QuestaoServiceImpl implements IQuestaoService {
         return questaoMapper.toResponses(questoes);
     }
 
+    @Transactional
     @Override
     public RespostaQuestaoResponseDTO responderQuestao(Integer idQuestao, Character alternativaEscolhida) {
         Questao questao = buscarQuestaoPorId(idQuestao);
@@ -111,6 +115,10 @@ public class QuestaoServiceImpl implements IQuestaoService {
         registrarRespostaUsuario(questao, acertou, usuario);
         log.info("Questão com id = " + idQuestao + " foi respondida.");
         questoesRespondidas.increment();
+
+        QuestaoRespondidaEvent event = new QuestaoRespondidaEvent(usuario, questao.getMateria(), questao.getAssunto(), acertou);
+        applicationEventPublisher.publishEvent(event);
+
         if(acertou){
             return new RespostaQuestaoResponseDTO(idQuestao, alternativaEscolhida, true, questao.getAlternativaCorreta());
         }
