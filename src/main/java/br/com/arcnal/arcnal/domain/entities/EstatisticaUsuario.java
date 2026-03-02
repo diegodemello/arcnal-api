@@ -1,21 +1,18 @@
 package br.com.arcnal.arcnal.domain.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
-@Table(
-        name = "estatisticas_usuarios",
-        indexes = {
-                @Index(name = "idx_usuario_periodo", columnList = "usuario_id, periodo"),
-                @Index(name = "idx_usuario_materia_periodo", columnList = "usuario_id, materia_id, periodo")
-        }
-)
+@Data
+@Table(name = "estatisticas_usuarios")
 public class EstatisticaUsuario {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -28,9 +25,6 @@ public class EstatisticaUsuario {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assunto_id")
     private Assunto assunto;
-
-    @Column(nullable = false, length = 20)
-    private String periodo;
 
     @Column(name = "total_respondidas", nullable = false)
     private Integer totalRespondidas;

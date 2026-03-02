@@ -12,5 +12,6 @@ public interface IRevisaoService {
     void criarRevisao(RevisaoRequestDTO dto, String emailUsuario);
     void adicionarQuestao(UUID idRevisao, AdicionarQuestaoRevisaoRequestDTO dto);
     List<RevisaoResponseDTO> listarRevisoesPorUsuario(UUID idUsuario);
+    Long quantidadeDeRevisoesPorUsuario(UUID idUsuario);
     DetalheRevisaoResponseDTO listarRevisao(Integer pagina, Integer objetos, UUID idRevisao);
 }

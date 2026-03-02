@@ -40,6 +40,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/questao/*/responder").authenticated()
                         .requestMatchers(HttpMethod.GET, "/questao/*/resolucao").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/estatistica").authenticated()
 
                         .requestMatchers(HttpMethod.POST, "/questao").hasAnyRole("PROFESSOR", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/materia").hasAnyRole("PROFESSOR", "ADMIN")
