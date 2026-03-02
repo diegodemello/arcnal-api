@@ -1,18 +1,23 @@
 package br.com.arcnal.arcnal.application.service.impl;
 
+import br.com.arcnal.arcnal.application.dto.response.RecuperarSenhaResponseDTO;
 import br.com.arcnal.arcnal.application.service.ISenhaService;
 import br.com.arcnal.arcnal.domain.entities.SenhaRecuperada;
 import br.com.arcnal.arcnal.domain.entities.Usuario;
 import br.com.arcnal.arcnal.domain.exception.EmailInvalidoException;
+import br.com.arcnal.arcnal.domain.exception.NumeroMaximoAtingidoException;
 import br.com.arcnal.arcnal.domain.repositories.SenhaRecuperadaRepository;
 import br.com.arcnal.arcnal.domain.repositories.UsuarioRepository;
 import br.com.arcnal.arcnal.infra.util.EnvioDeEmail;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import io.micrometer.core.instrument.Counter;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -30,13 +35,16 @@ public class SenhaServiceImpl implements ISenhaService {
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
     private final EnvioDeEmail envioDeEmail;
     private final EmailTemplateServiceImpl emailTemplateService;
+    private final Counter senhasRedefinidas;
+
+    private static final int MAX_TOKENS_POR_USUARIO = 5;
 
     @Override
-    @Async
     @Transactional
-    public void recuperarSenha(String email) {
+    public RecuperarSenhaResponseDTO recuperarSenha(String email) {
         validarEmail(email);
         if(existeUsuarioComEsseEmail(email)) {
+            validarSePodeRedefinirSenha(email);
             String tokenGerado = gerarTokenRecuperacaoSenha();
             SenhaRecuperada senhaRecuperada = new SenhaRecuperada();
             senhaRecuperada.setUsuario(usuarioRepository.findByEmailEndereco(email).orElse(null));
@@ -44,9 +52,10 @@ public class SenhaServiceImpl implements ISenhaService {
             senhaRecuperada.setUtilizado(false);
             senhaRecuperada.setDataExpiracao(LocalDateTime.now().plusMinutes(30));
             senhaRecuperadaRepository.save(senhaRecuperada);
-
-            enviarEmailDeRecuperacao(tokenGerado, email);
+            senhasRedefinidas.increment();
+            enviarEmailDeRecuperacaoAsync(tokenGerado, email);
         }
+        return new RecuperarSenhaResponseDTO("Email de recuperação enviado para " + email + ", você deve receber um email em breve com as instruções para redefinir sua senha. Se não receber, verifique sua caixa de spam ou tente novamente.");
     }
 
     @Override
@@ -61,6 +70,11 @@ public class SenhaServiceImpl implements ISenhaService {
 
         usuarioRepository.save(usuario);
         senhaRecuperadaRepository.save(senhaRecuperada);
+    }
+
+    @Async
+    private void enviarEmailDeRecuperacaoAsync(String token, String email){
+        enviarEmailDeRecuperacao(token, email);
     }
 
     private void enviarEmailDeRecuperacao(String token, String email) {
@@ -116,5 +130,22 @@ public class SenhaServiceImpl implements ISenhaService {
         SenhaRecuperada senhaRecuperada = senhaRecuperadaRepository.findByToken(token)
                 .orElseThrow(() -> new TokenExpiredException("O token de recuperação de senha expirou ou já foi utilizado.", null));
         return senhaRecuperada.getUsuario();
+    }
+
+    private Usuario obterUsuarioPorEmail(String email){
+        return usuarioRepository.findByEmailEndereco(email)
+                .orElseThrow(() -> new EmailInvalidoException("Não existe um usuário cadastrado com o email " + email));
+    }
+
+    private void validarSePodeRedefinirSenha(String email){
+        Usuario usuario = obterUsuarioPorEmail(email);
+        LocalDateTime agora = LocalDateTime.now();
+        Long quantidade = senhaRecuperadaRepository.findAllByUsuarioId(usuario.getId())
+                .stream()
+                .filter(s -> s.getDataExpiracao().toLocalDate().equals(agora.toLocalDate()))
+                .count();
+        if(quantidade > MAX_TOKENS_POR_USUARIO){
+            throw new NumeroMaximoAtingidoException("Limite de tentativas de recuperação de senha atingido para o email " + email + ". Por favor, tente novamente amanhã.");
+        }
     }
 }

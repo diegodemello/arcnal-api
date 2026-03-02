@@ -139,6 +139,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
     }
 
+
+    @ExceptionHandler(NumeroMaximoAtingidoException.class)
+    public ResponseEntity<ExceptionResponse> handleNumeroMaximoAtingido(NumeroMaximoAtingidoException ex){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.TOO_MANY_REQUESTS
+                .value(), ex.getMessage(), Instant.now());
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(exceptionResponse);
+    }
+
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleEmailInvalido(UsernameNotFoundException ex){
         ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.UNAUTHORIZED.value(), "Credenciais inválidas.", Instant.now());
