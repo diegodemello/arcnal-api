@@ -11,7 +11,7 @@ import br.com.arcnal.arcnal.application.dto.response.ResolucaoQuestaoResponseDTO
 import br.com.arcnal.arcnal.application.dto.response.RespostaQuestaoResponseDTO;
 import br.com.arcnal.arcnal.application.mapper.QuestaoMapper;
 import br.com.arcnal.arcnal.domain.valueobjects.ArquivoInfo;
-import br.com.arcnal.arcnal.infra.storage.AzureBlobStorageService;
+import br.com.arcnal.arcnal.infra.storage.SupabaseBlobStorageService;
 import br.com.arcnal.arcnal.infra.util.AuthFacade;
 import io.micrometer.core.instrument.Counter;
 import jakarta.transaction.Transactional;
@@ -41,7 +41,7 @@ public class QuestaoServiceImpl implements IQuestaoService {
     private final QuestaoMapper questaoMapper;
     private final RespostaUsuarioRepository respostaUsuarioRepository;
     private final AuthFacade authFacade;
-    private final AzureBlobStorageService azureBlobStorageService;
+    private final SupabaseBlobStorageService azureBlobStorageService;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final ImagemRepository imagemRepository;
 
