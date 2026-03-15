@@ -1,11 +1,9 @@
 package br.com.arcnal.arcnal.infra.util;
 
-import com.azure.communication.email.EmailClient;
-import com.azure.communication.email.EmailClientBuilder;
-import com.azure.communication.email.models.EmailMessage;
-import com.azure.communication.email.models.EmailSendResult;
-import com.azure.core.util.polling.PollResponse;
-import com.azure.core.util.polling.SyncPoller;
+import com.resend.Resend;
+import com.resend.core.exception.ResendException;
+import com.resend.services.emails.model.CreateEmailOptions;
+import com.resend.services.emails.model.CreateEmailResponse;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,21 +12,35 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class EnvioDeEmail {
-    @Value("${azure.communication.services.connection-string}")
-    String connectionString;
 
-    @Value("${azure.communication.services.sender-email}")
-    String senderEmail;
+    @Value("${resend.api-key}")
+    String resendApiKey;
 
-    private EmailClient emailClient;
+    Resend resend;
 
     @PostConstruct
     public void init(){
-        this.emailClient = new EmailClientBuilder()
-                .connectionString(connectionString)
-                .buildClient();
+        this.resend = new Resend(resendApiKey);
     }
 
+    public void enviarEmail(String destinatario, String assunto, String html) {
+        try {
+            CreateEmailOptions params = CreateEmailOptions.builder()
+                    .from("Recuperação de Senha <no-reply@arcnal.com.br>")
+                    .to(destinatario)
+                    .subject(assunto)
+                    .html(html)
+                    .build();
+
+            CreateEmailResponse data = resend.emails().send(params);
+
+            log.info("Email enviado: {}", data.getId());
+        } catch (Exception e) {
+            log.warn("Erro ao enviar o e-mail", e);
+            throw new RuntimeException("Falha ao enviar o e-mail");
+        }
+    }
+/*
     public void enviarEmail(String destinatario, String assunto, String html) {
         EmailMessage mensagem = new EmailMessage()
                 .setSenderAddress(senderEmail)
@@ -40,4 +52,5 @@ public class EnvioDeEmail {
         PollResponse<EmailSendResult> response = poller.waitForCompletion();
         log.info("Email enviado, ID da operação: " + response.getValue().getId());
     }
+    */
 }
