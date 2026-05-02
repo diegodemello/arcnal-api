@@ -73,7 +73,7 @@ public class SenhaServiceImpl implements ISenhaService {
     }
 
     @Async
-    private void enviarEmailDeRecuperacaoAsync(String token, String email){
+    public void enviarEmailDeRecuperacaoAsync(String token, String email){
         enviarEmailDeRecuperacao(token, email);
     }
 
@@ -92,8 +92,7 @@ public class SenhaServiceImpl implements ISenhaService {
 
         String html = emailTemplateService.gerarEmailRecuperacao(usuario.getNome(), link);
 
-        envioDeEmail.enviarEmail(email, "Arcnal - Recuperação de senha",
-                html);
+        envioDeEmail.enviarEmail(email, "Arcnal - Recuperação de senha", html);
     }
 
     private void validarEmail(String email){
